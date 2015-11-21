@@ -15,7 +15,7 @@
 int main()
 {
     Graph<AdjacencyVector> g(EXAMPLE_PATH);
-    std::cout << *g.getStructure() << std::endl;
+//    std::cout << *g.getStructure() << std::endl;
     g.generateOutput(EXAMPLE_OUTPUT);
 
     return 0;

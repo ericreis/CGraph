@@ -13,9 +13,11 @@ template <typename T>
 class Graph
 {
 private:
-    int n, m;
+    int n, m, maxD;
     double mediumD;
 
+    std::vector<int> *nds;      // Stores the degree of each node
+    std::vector<int> *ds;       // Stores the nodes of each degree
     T *structure;
 
 public:

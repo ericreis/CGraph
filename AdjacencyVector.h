@@ -16,9 +16,10 @@
 class AdjacencyVector
 {
 private:
-    int n, m;
-    double mediumD;
+    int n, m, maxD;
 
+    std::vector<int> *nds;      // Stores the degrees of each node
+    std::vector<int> *ds;       // Stores the number of nodes of each degree
     std::vector< std::vector<int> > *vector;
 
     friend std::ostream &operator<< (std::ostream &out, const AdjacencyVector &v);
@@ -29,7 +30,9 @@ public:
 
     int getN() const;
     int getM() const;
-    double getMediumD() const;
+    int getMaxD() const;
+    std::vector<int> *getNds() const;
+    std::vector<int> *getDs() const;
     std::vector< std::vector<int> > *getVector() const;
 };
 

@@ -10,6 +10,10 @@ Graph<T>::Graph(const std::string file)
     Graph::structure = new T(file);
     Graph::n = Graph::structure->getN();
     Graph::m = Graph::structure->getM();
+    Graph::maxD = Graph::structure->getMaxD();
+    Graph::mediumD = 2.0 * Graph::m / Graph::n;
+    Graph::nds = Graph::structure->getNds();
+    Graph::ds = Graph::structure->getDs();
 }
 
 template <typename T>
@@ -33,6 +37,10 @@ void Graph<T>::generateOutput(const std::string s)
         writef << "# n = " << Graph::n << "\n";
         writef << "# m = " << Graph::m << "\n";
         writef << "# d_medio = " << Graph::mediumD << "\n";
+        for (int i = 0; i <= Graph::maxD; ++i)
+        {
+            writef << i << " " << (double) Graph::ds->at(i) / Graph::n << "\n";
+        }
     }
 }
 

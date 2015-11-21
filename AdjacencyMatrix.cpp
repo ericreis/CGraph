@@ -22,6 +22,7 @@ AdjacencyMatrix::AdjacencyMatrix(const std::string file)
         std::cout << "Finished initialization" << std::endl;
 
         AdjacencyMatrix::m = 0;
+        AdjacencyMatrix::nds = new std::vector<int>(AdjacencyMatrix::n, 0);
 
         std::cout << "Filling Adjacency Matrix ..." << std::endl;
         while (getline(readf, line))
@@ -32,11 +33,33 @@ AdjacencyMatrix::AdjacencyMatrix(const std::string file)
             int nodeB = Constants::string2int(v.at(1)) - 1;
             AdjacencyMatrix::matrix->at(nodeA).at(nodeB) = 1;
             AdjacencyMatrix::matrix->at(nodeB).at(nodeA) = 1;
+
+            ++AdjacencyMatrix::nds->at(nodeA);
+            ++AdjacencyMatrix::nds->at(nodeB);
+
+            // Updates the maximum degree value for the graph
+            if (AdjacencyMatrix::nds->at(nodeA) > AdjacencyMatrix::maxD)
+            {
+                AdjacencyMatrix::maxD = AdjacencyMatrix::nds->at(nodeA);
+            }
+            else if (AdjacencyMatrix::nds->at(nodeB) > AdjacencyMatrix::maxD)
+            {
+                AdjacencyMatrix::maxD = AdjacencyMatrix::nds->at(nodeB);
+            }
         }
         std::cout << "Finished filling the matrix" << std::endl;
     }
-
     readf.close();
+
+    std::cout << "Storing relative frequencies ..." << std::endl;
+    // As an node can have degree 0, we need to create a vector of size maxD + 1
+    AdjacencyMatrix::ds = new std::vector<int>(AdjacencyMatrix::maxD + 1, 0);
+    for (std::vector<int>::iterator it = AdjacencyMatrix::nds->begin(); it != AdjacencyMatrix::nds->end(); ++it)
+    {
+        ++AdjacencyMatrix::ds->at(it - AdjacencyMatrix::nds->begin());
+    }
+    std::cout << "Finished storing frequencies" << std::endl;
+
     clock_t endTime = clock();
 
     std::cout << "tooked " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " secs" << std::endl;
@@ -57,9 +80,19 @@ int AdjacencyMatrix::getM() const
     return AdjacencyMatrix::m;
 }
 
-double AdjacencyMatrix::getMediumD() const
+int AdjacencyMatrix::getMaxD() const
 {
-    return AdjacencyMatrix::mediumD;
+    return AdjacencyMatrix::maxD;
+}
+
+std::vector<int> * AdjacencyMatrix::getNds() const
+{
+    return AdjacencyMatrix::nds;
+}
+
+std::vector<int>* AdjacencyMatrix::getDs() const
+{
+    return AdjacencyMatrix::ds;
 }
 
 std::vector< std::vector<int> >* AdjacencyMatrix::getMatrix() const

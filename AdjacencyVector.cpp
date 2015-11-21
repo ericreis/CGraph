@@ -22,6 +22,8 @@ AdjacencyVector::AdjacencyVector(const std::string file)
         std::cout << "Finished initialization" << std::endl;
 
         AdjacencyVector::m = 0;
+        AdjacencyVector::maxD = 0;
+        AdjacencyVector::nds = new std::vector<int>(AdjacencyVector::n, 0);
 
         std::cout << "Filling Adjacency Vector ..." << std::endl;
         while (getline(readf, line))
@@ -32,11 +34,33 @@ AdjacencyVector::AdjacencyVector(const std::string file)
             int nodeB = Constants::string2int(v.at(1)) - 1;
             AdjacencyVector::vector->at(nodeA).push_back(nodeB);
             AdjacencyVector::vector->at(nodeB).push_back(nodeA);
+
+            ++AdjacencyVector::nds->at(nodeA);
+            ++AdjacencyVector::nds->at(nodeB);
+
+            // Updates the maximum degree value for the graph
+            if (AdjacencyVector::nds->at(nodeA) > AdjacencyVector::maxD)
+            {
+                AdjacencyVector::maxD = AdjacencyVector::nds->at(nodeA);
+            }
+            else if (AdjacencyVector::nds->at(nodeB) > AdjacencyVector::maxD)
+            {
+                AdjacencyVector::maxD = AdjacencyVector::nds->at(nodeB);
+            }
         }
         std::cout << "Finished filling the vector" << std::endl;
     }
-
     readf.close();
+
+    std::cout << "Storing relative frequencies ..." << std::endl;
+    // As an node can have degree 0, we need to create a vector of size maxD + 1
+    AdjacencyVector::ds = new std::vector<int>(AdjacencyVector::maxD + 1, 0);
+    for (std::vector<int>::iterator it = AdjacencyVector::nds->begin(); it != AdjacencyVector::nds->end(); ++it)
+    {
+        ++AdjacencyVector::ds->at(*it);
+    }
+    std::cout << "Finished storing frequencies" << std::endl;
+
     clock_t endTime = clock();
 
     std::cout << "tooked " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " secs" << std::endl;
@@ -57,9 +81,19 @@ int AdjacencyVector::getM() const
     return AdjacencyVector::m;
 }
 
-double AdjacencyVector::getMediumD() const
+int AdjacencyVector::getMaxD() const
 {
-    return AdjacencyVector::mediumD;
+    return AdjacencyVector::maxD;
+}
+
+std::vector<int>* AdjacencyVector::getDs() const
+{
+    return AdjacencyVector::ds;
+}
+
+std::vector<int> *AdjacencyVector::getNds() const
+{
+    return AdjacencyVector::nds;
 }
 
 std::vector< std::vector<int> > *AdjacencyVector::getVector() const
