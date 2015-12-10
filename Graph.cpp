@@ -44,5 +44,11 @@ void Graph<T>::generateOutput(const std::string s)
     }
 }
 
+template <typename T>
+std::vector<int> *Graph<T>::getNeighbours(const int v)
+{
+    return Graph::structure->getNeighbours(v);
+}
+
 template class Graph<AdjacencyMatrix>;
 template class Graph<AdjacencyVector>;

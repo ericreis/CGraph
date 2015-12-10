@@ -114,3 +114,16 @@ std::ostream& operator<<(std::ostream &out, const AdjacencyVector &v)
     }
     return out;
 }
+
+std::vector<int> *AdjacencyVector::getNeighbours(int v)
+{
+    if (v < AdjacencyVector::n)
+    {
+        std::vector<int> *neighbours = new std::vector<int>(AdjacencyVector::vector->at(v));
+        return neighbours;
+    }
+    else
+    {
+        throw std::invalid_argument("AdjacencyVector: node not in graph");
+    }
+}

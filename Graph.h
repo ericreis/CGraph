@@ -27,6 +27,7 @@ public:
     T *getStructure();
 
     void generateOutput(const std::string s);
+    std::vector<int> *getNeighbours(const int v);
 
 };
 

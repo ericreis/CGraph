@@ -1,3 +1,6 @@
+# Build Directory
+build/
+
 # IDE Files
 .DS_Store
 .idea

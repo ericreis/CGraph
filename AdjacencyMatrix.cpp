@@ -113,4 +113,25 @@ std::ostream& operator<<(std::ostream &out, const AdjacencyMatrix &m)
     return out;
 }
 
+std::vector<int> *AdjacencyMatrix::getNeighbours(int v)
+{
+    if (v < AdjacencyMatrix::n)
+    {
+        std::vector<int> *neighbours = new std::vector<int>(AdjacencyMatrix::nds->at(v), 0);
+        int neighbourIndex = 0;
+        for (std::vector<int>::iterator i = AdjacencyMatrix::matrix->at(v).begin(); i != AdjacencyMatrix::matrix->at(v).end(); ++i)
+        {
+            if (*i == 1)
+            {
+                neighbours->at(neighbourIndex) = i - AdjacencyMatrix::matrix->at(v).begin();    //error
+            }
+        }
+        return neighbours;
+    }
+    else
+    {
+        throw std::invalid_argument("AdjacencyMatrix: node not in graph");
+    }
+}
+
 

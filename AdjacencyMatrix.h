@@ -10,6 +10,7 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <stdexcept>
 
 #include "Constants.h"
 
@@ -34,6 +35,8 @@ public:
     std::vector<int> *getNds() const;
     std::vector<int> *getDs() const;
     std::vector< std::vector<int> > *getMatrix() const;
+
+    std::vector<int> *getNeighbours(int v);
 };
 
 
