@@ -8,6 +8,9 @@
 #include "AdjacencyMatrix.h"
 #include "AdjacencyVector.h"
 
+#include <queue>
+#include <stack>
+
 
 template <typename T>
 class Graph
@@ -29,6 +32,8 @@ public:
     void generateOutput(const std::string s);
     std::vector<int> *getNeighbours(const int v);
 
+    void bfs(const int s);
+    void dfs(const int s);
 };
 
 

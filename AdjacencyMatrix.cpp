@@ -119,11 +119,12 @@ std::vector<int> *AdjacencyMatrix::getNeighbours(int v)
     {
         std::vector<int> *neighbours = new std::vector<int>(AdjacencyMatrix::nds->at(v), 0);
         int neighbourIndex = 0;
-        for (std::vector<int>::iterator i = AdjacencyMatrix::matrix->at(v).begin(); i != AdjacencyMatrix::matrix->at(v).end(); ++i)
+        for (std::vector<int>::iterator it = AdjacencyMatrix::matrix->at(v).begin(); it != AdjacencyMatrix::matrix->at(v).end(); ++it)
         {
-            if (*i == 1)
+            if (*it == 1)
             {
-                neighbours->at(neighbourIndex) = i - AdjacencyMatrix::matrix->at(v).begin();    //error
+                neighbours->at(neighbourIndex) = it - AdjacencyMatrix::matrix->at(v).begin();
+                ++neighbourIndex;
             }
         }
         return neighbours;
