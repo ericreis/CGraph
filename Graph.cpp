@@ -14,6 +14,7 @@ Graph<T>::Graph(const std::string file)
     Graph::mediumD = 2.0 * Graph::m / Graph::n;
     Graph::nds = Graph::structure->getNds();
     Graph::ds = Graph::structure->getDs();
+    Graph::tree = new std::vector< std::tuple<int, int> >(Graph::structure->getN(), std::tuple<int, int>(-1, -1));
 }
 
 template <typename T>
@@ -37,9 +38,15 @@ void Graph<T>::generateOutput(const std::string s)
         writef << "# n = " << Graph::n << "\n";
         writef << "# m = " << Graph::m << "\n";
         writef << "# d_medio = " << Graph::mediumD << "\n";
-        for (int i = 0; i <= Graph::maxD; ++i)
+        for (int i = 0; i <= Graph::maxD; ++i)   
         {
             writef << i << " " << (double) Graph::ds->at(i) / Graph::n << "\n";
+        }
+        // writing spanning tree
+        writef << "Spanning tree:\n";
+        for (int i = 0; i<= Graph::n; ++i)
+        {
+            writef << i << " (" << std::get<0>(Graph::tree->at(i)) << "," << std::get<1>(Graph::tree->at(i)) << ")\n";
         }
     }
 }
@@ -53,6 +60,7 @@ std::vector<int> *Graph<T>::getNeighbours(const int v)
 template <typename T>
 void Graph<T>::bfs(const int s)
 {
+    int level = 0;
     std::cout << "Started BFS ..." << std::endl;
 
     clock_t startTime = clock();
@@ -61,8 +69,10 @@ void Graph<T>::bfs(const int s)
     std::queue<int> *queue = new std::queue<int>();
     marked->at(s) = 1;
     queue->push(s);
+    tree->at(s) = (0,level);
     while (!queue->empty())
     {
+        ++level;
         int vert = queue->front();
         queue->pop();
         std::vector<int> *neighbours = Graph::structure->getNeighbours(vert);
@@ -72,6 +82,7 @@ void Graph<T>::bfs(const int s)
             {
                 marked->at(*it) = 1;
                 queue->push(*it);
+                tree->at(*it) = std::make_tuple (vert,level); // stores 'vert' as the parent of the current node being marked, and 'level' as its level
             }
         }
         delete neighbours;
@@ -81,7 +92,7 @@ void Graph<T>::bfs(const int s)
     clock_t endTime = clock();
 
     std::cout << "Finished running BFS ..." << std::endl;
-    std::cout << "tooked " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " secs" << std::endl;
+    std::cout << "took " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " secs" << std::endl;
 }
 
 template <typename T>
@@ -127,7 +138,7 @@ void Graph<T>::dfs(const int s)
     clock_t endTime = clock();
 
     std::cout << "Finished running DFS ..." << std::endl;
-    std::cout << "tooked " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " secs" << std::endl;
+    std::cout << "took " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " secs" << std::endl;
 }
 
 template class Graph<AdjacencyMatrix>;

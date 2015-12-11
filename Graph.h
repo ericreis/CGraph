@@ -23,6 +23,8 @@ private:
     std::vector<int> *ds;       // Stores the nodes of each degree
     T *structure;
 
+    std::vector< std::tuple<int,int> > *tree; // Stores the parent and level of each node in the spanning tree, in the format: (parent,level)
+
 public:
     Graph(const std::string file);
     ~Graph();

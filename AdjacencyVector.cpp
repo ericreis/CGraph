@@ -17,7 +17,7 @@ AdjacencyVector::AdjacencyVector(const std::string file)
         getline(readf, line);
         AdjacencyVector::n = Constants::string2int(line);
 
-        std::cout << "Initializing empty Adjacency Matrix ..." << std::endl;
+        std::cout << "Initializing empty Adjacency Vector ..." << std::endl;
         AdjacencyVector::vector = new std::vector< std::vector<int> >(AdjacencyVector::n, std::vector<int>());
         std::cout << "Finished initialization" << std::endl;
 
@@ -63,7 +63,7 @@ AdjacencyVector::AdjacencyVector(const std::string file)
 
     clock_t endTime = clock();
 
-    std::cout << "tooked " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " secs" << std::endl;
+    std::cout << "took " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " secs" << std::endl;
 }
 
 AdjacencyVector::~AdjacencyVector()

@@ -22,6 +22,7 @@ AdjacencyMatrix::AdjacencyMatrix(const std::string file)
         std::cout << "Finished initialization" << std::endl;
 
         AdjacencyMatrix::m = 0;
+        AdjacencyMatrix::maxD = 0;
         AdjacencyMatrix::nds = new std::vector<int>(AdjacencyMatrix::n, 0);
 
         std::cout << "Filling Adjacency Matrix ..." << std::endl;
@@ -62,7 +63,7 @@ AdjacencyMatrix::AdjacencyMatrix(const std::string file)
 
     clock_t endTime = clock();
 
-    std::cout << "tooked " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " secs" << std::endl;
+    std::cout << "took " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " secs" << std::endl;
 }
 
 AdjacencyMatrix::~AdjacencyMatrix()
