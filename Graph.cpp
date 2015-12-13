@@ -60,7 +60,7 @@ std::vector<int> *Graph<T>::getNeighbours(const int v)
 template <typename T>
 void Graph<T>::bfs(const int s)
 {
-    int level = 0;
+    //int level = 0;
     std::cout << "Started BFS ..." << std::endl;
 
     clock_t startTime = clock();
@@ -69,10 +69,10 @@ void Graph<T>::bfs(const int s)
     std::queue<int> *queue = new std::queue<int>();
     marked->at(s) = 1;
     queue->push(s);
-    tree->at(s) = (0,level);
+    tree->at(s) = std::make_tuple(-1,0); //tree->at(s) = (-1,level);
     while (!queue->empty())
     {
-        ++level;
+        //++level;
         int vert = queue->front();
         queue->pop();
         std::vector<int> *neighbours = Graph::structure->getNeighbours(vert);
@@ -82,7 +82,8 @@ void Graph<T>::bfs(const int s)
             {
                 marked->at(*it) = 1;
                 queue->push(*it);
-                tree->at(*it) = std::make_tuple (vert,level); // stores 'vert' as the parent of the current node being marked, and 'level' as its level
+                tree->at(*it) = std::make_tuple (vert,std::get<1>(Graph::tree->at(vert))+1);
+                //tree->at(*it) = std::make_tuple (vert,level); // stores 'vert' as the parent of the current node being marked, and 'level' as its level
             }
         }
         delete neighbours;
@@ -102,6 +103,7 @@ void Graph<T>::dfs(const int s)
 
     clock_t startTime = clock();
 
+    tree->at(s) = std::make_tuple(-1,0);
     std::vector<int> *marked = new std::vector<int>(Graph::n, 0);
     std::stack<int> *stack = new std::stack<int>();
 //    marked->at(s) = 1;
@@ -118,6 +120,7 @@ void Graph<T>::dfs(const int s)
             for (std::vector<int>::iterator it = neighbours->begin(); it != neighbours->end(); ++it)
             {
                 stack->push(*it);
+                tree->at(*it) = std::make_tuple (vert,std::get<1>(Graph::tree->at(vert))+1);
             }
             delete neighbours;
         }
