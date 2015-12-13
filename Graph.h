@@ -11,7 +11,7 @@
 #include <queue>
 #include <stack>
 #include <tuple>
-
+#include <list>
 
 template <typename T>
 class Graph
@@ -26,6 +26,9 @@ private:
 
     std::vector< std::tuple<int,int> > *tree; // Stores the parent and level of each node in the spanning tree, in the format: (parent,level)
 
+    std::vector<int> *ccMarked; // Mark vector used in connectedComponents method
+    std::list< std::tuple< int, std::list<int> > > *ccs;   // Stores the connected components (size of cc, vector of cc's elements)
+
 public:
     Graph(const std::string file);
     ~Graph();
@@ -35,8 +38,9 @@ public:
     void generateOutput(const std::string s);
     std::vector<int> *getNeighbours(const int v);
 
-    void bfs(const int s);
-    void dfs(const int s);
+    std::list<int> *bfs(const int s);
+    std::list<int> *dfs(const int s);
+    bool connectedComponents();
 };
 
 
