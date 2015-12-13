@@ -1,0 +1,22 @@
+DBLP_GRAPH (130k vertices): 
+Tempo medio para executar 10 BFS: 0.457925
+Tempo medio para executar 10 DFS: 0.593337
+Pai dos vertices 10, 20, 30, 40, 50 comecando em 1, 2, 3, 4, 5: 
+BFS: 
+1: 360594, 777134, 0, 509242, 1395407, 
+2: 742457, 777134, 0, 509242, 1395454, 
+3: 742457, 777134, 0, 509242, 1395454, 
+4: 742457, 777134, 0, 509242, 1395454, 
+5: 742457, 777134, 0, 509242, 1395454, 
+DFS: 
+1: 736156, 42023, 0, 509242, 1395407, 
+2: 736156, 42023, 0, 509242, 1395407, 
+3: 736156, 42023, 0, 509242, 1395407, 
+4: 736156, 42023, 0, 509242, 1395407, 
+5: 736156, 42023, 0, 509242, 1395407, 
+Componentes conexas. Quantas tem, qual a maior e qual a maior? 
+Ver no final do output de cada grafo (ESTAO EM ORDEM DECRESCENTE, logo a primeira e a maior e a ultima a menor) 
+Distribuicao Empirica. Grafico 
+Ver no output de cada grafico tambem 
+Diametro. ??????
+

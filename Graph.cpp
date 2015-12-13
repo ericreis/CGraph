@@ -14,21 +14,32 @@ Graph<T>::Graph(const std::string file)
     Graph::mediumD = 2.0 * Graph::m / Graph::n;
     Graph::nds = Graph::structure->getNds();
     Graph::ds = Graph::structure->getDs();
-    Graph::tree = new std::vector< std::tuple<int, int> >(Graph::structure->getN(), std::tuple<int, int>(-1, -1));
-    Graph::ccMarked = new std::vector<int>(Graph::n, 0);
-    Graph::ccs = new std::list< std::tuple< int, std::list<int> > >();
+    Graph::tree = std::vector< std::tuple<int, int> >(Graph::structure->getN(), std::tuple<int, int>(-1, -1));
+    Graph::ccMarked = std::vector<int>(Graph::n, 0);
 }
 
 template <typename T>
 Graph<T>::~Graph()
 {
-    delete Graph::structure;
+    delete Graph::structure, Graph::tree, Graph::ccMarked, Graph::ccs, Graph::ds, Graph::nds;
 }
 
 template <typename T>
 T *Graph<T>::getStructure()
 {
     return Graph::structure;
+}
+
+template <typename T>
+std::vector< std::tuple<int,int> > Graph<T>::getTree()
+{
+    return Graph::tree;
+}
+
+template <typename T>
+std::list< std::tuple< int, std::list<int> > > Graph<T>::getCcs()
+{
+    return Graph::ccs;
 }
 
 template <typename T>
@@ -42,7 +53,7 @@ void Graph<T>::generateOutput(const std::string s)
         writef << "# d_medio = " << Graph::mediumD << "\n";
         for (int i = 0; i <= Graph::maxD; ++i)   
         {
-            writef << i << " " << (double) Graph::ds->at(i) / Graph::n << "\n";
+            writef << i << " " << (double) Graph::ds.at(i) / Graph::n << "\n";
         }
         writef << "\n";
         // writing spanning tree
@@ -50,13 +61,13 @@ void Graph<T>::generateOutput(const std::string s)
         writef << "Node (Father, Level) \n";
         for (int i = 0; i < Graph::n; ++i)
         {
-            writef << i + 1 << " (" << std::get<0>(Graph::tree->at(i)) + 1 << "," << std::get<1>(Graph::tree->at(i)) << ")\n";
+            writef << i + 1 << " (" << std::get<0>(Graph::tree.at(i)) + 1 << "," << std::get<1>(Graph::tree.at(i)) << ")\n";
         }
         writef << "\n";
         //writing connected components
-        writef << "Connected components: " << Graph::ccs->size() << " components \n";
-        Graph::ccs->sort(std::greater< std::tuple< int, std::list<int> > >());
-        for (std::list< std::tuple< int, std::list<int> > >::iterator it = Graph::ccs->begin(); it != Graph::ccs->end(); ++it)
+        writef << "Connected components: " << Graph::ccs.size() << " components \n";
+        Graph::ccs.sort(std::greater< std::tuple< int, std::list<int> > >());
+        for (std::list< std::tuple< int, std::list<int> > >::iterator it = Graph::ccs.begin(); it != Graph::ccs.end(); ++it)
         {
             writef << std::get<0>(*it) << ": [";
             for (std::list<int>::iterator iti = std::get<1>(*it).begin(); iti != std::get<1>(*it).end(); ++iti)
@@ -66,51 +77,52 @@ void Graph<T>::generateOutput(const std::string s)
             writef << "] \n";
         }
     }
+    writef.close();
 }
 
 template <typename T>
-std::vector<int> *Graph<T>::getNeighbours(const int v)
+std::vector<int> Graph<T>::getNeighbours(const int v)
 {
     return Graph::structure->getNeighbours(v);
 }
 
 template <typename T>
-std::list<int> *Graph<T>::bfs(const int s)
+std::list<int> Graph<T>::bfs(const int s)
 {
     //int level = 0;
     std::cout << "Started BFS ..." << std::endl;
 
     clock_t startTime = clock();
 
-    std::vector<int> *marked = new std::vector<int>(Graph::n, 0);
-    std::queue<int> *queue = new std::queue<int>();
-    std::list<int> *covered = new std::list<int>();
-    marked->at(s) = 1;
-    queue->push(s);
-    tree->at(s) = std::make_tuple(-1,0); //tree->at(s) = (-1,level);
-    while (!queue->empty())
+    std::vector<int> marked(Graph::n, 0);
+    std::queue<int> queue;
+    std::list<int> covered;
+    marked.at(s) = 1;
+    queue.push(s);
+    tree.at(s) = std::make_tuple(-1,0); //tree->at(s) = (-1,level);
+    while (!queue.empty())
     {
         //++level;
-        int vert = queue->front();
-        queue->pop();
+        int vert = queue.front();
+        queue.pop();
 
-        covered->push_back(vert);
+        covered.push_back(vert);
 
-        std::vector<int> *neighbours = Graph::structure->getNeighbours(vert);
-        for (std::vector<int>::iterator it = neighbours->begin(); it != neighbours->end(); ++it)
+        std::vector<int> neighbours = Graph::structure->getNeighbours(vert);
+        for (std::vector<int>::iterator it = neighbours.begin(); it != neighbours.end(); ++it)
         {
-            if (marked->at(*it) == 0)
+            if (marked.at(*it) == 0)
             {
-                marked->at(*it) = 1;
-                Graph::ccMarked->at(*it) = 1;
-                queue->push(*it);
-                tree->at(*it) = std::make_tuple (vert, std::get<1>(Graph::tree->at(vert)) + 1);
+                marked.at(*it) = 1;
+                Graph::ccMarked.at(*it) = 1;
+                queue.push(*it);
+                tree.at(*it) = std::make_tuple (vert, std::get<1>(Graph::tree.at(vert)) + 1);
                 //tree->at(*it) = std::make_tuple (vert,level); // stores 'vert' as the parent of the current node being marked, and 'level' as its level
             }
         }
-        delete neighbours;
+//        delete neighbours;
     }
-    delete queue, marked;
+//    delete queue, marked;
 
     clock_t endTime = clock();
 
@@ -121,46 +133,46 @@ std::list<int> *Graph<T>::bfs(const int s)
 }
 
 template <typename T>
-std::list<int> *Graph<T>::dfs(const int s)
+std::list<int> Graph<T>::dfs(const int s)
 {
     std::cout << "Started DFS ..." << std::endl;
 
     clock_t startTime = clock();
 
-    std::vector<int> *marked = new std::vector<int>(Graph::n, 0);
-    std::stack<int> *stack = new std::stack<int>();
-    std::list<int> *covered = new std::list<int>();
-    std::vector<int> *coveredMarked = new std::vector<int>(Graph::n, 0);
-    stack->push(s);
-    tree->at(s) = std::make_tuple(-1,0);
-    while (!stack->empty())
+    std::vector<int> marked(Graph::n, 0);
+    std::stack<int> stack;
+    std::list<int> covered;
+    std::vector<int> coveredMarked(Graph::n, 0);
+    stack.push(s);
+    tree.at(s) = std::make_tuple(-1,0);
+    while (!stack.empty())
     {
-        int vert = stack->top();
-        stack->pop();
+        int vert = stack.top();
+        stack.pop();
 
-        if (coveredMarked->at(vert) == 0)
+        if (coveredMarked.at(vert) == 0)
         {
-            coveredMarked->at(vert) = 1;
-            covered->push_back(vert);
+            coveredMarked.at(vert) = 1;
+            covered.push_back(vert);
         }
 
-        if (marked->at(vert) == 0)
+        if (marked.at(vert) == 0)
         {
-            marked->at(vert) = 1;
-            Graph::ccMarked->at(vert) = 1;
-            std::vector<int> *neighbours = Graph::structure->getNeighbours(vert);
-            for (std::vector<int>::iterator it = neighbours->begin(); it != neighbours->end(); ++it)
+            marked.at(vert) = 1;
+            Graph::ccMarked.at(vert) = 1;
+            std::vector<int> neighbours = Graph::structure->getNeighbours(vert);
+            for (std::vector<int>::iterator it = neighbours.begin(); it != neighbours.end(); ++it)
             {
-                if (marked->at(*it) == 0)
+                if (marked.at(*it) == 0)
                 {
-                    stack->push(*it);
-                    tree->at(*it) = std::make_tuple (vert, std::get<1>(Graph::tree->at(vert)) + 1);
+                    stack.push(*it);
+                    tree.at(*it) = std::make_tuple (vert, std::get<1>(Graph::tree.at(vert)) + 1);
                 }
             }
-            delete neighbours;
+//            delete neighbours;
         }
     }
-    delete stack, marked;
+//    delete stack, marked;
 
     clock_t endTime = clock();
 
@@ -171,22 +183,26 @@ std::list<int> *Graph<T>::dfs(const int s)
 }
 
 template <typename T>
-bool Graph<T>::connectedComponents()
+void Graph<T>::connectedComponents()
 {
     std::cout << "Started Connected Components ..." << std::endl;
 
     clock_t startTime = clock();
 
-    Graph::ccMarked = new std::vector<int>(Graph::n, 0);
-    Graph::ccs = new std::list< std::tuple< int, std::list<int> > >();
+    Graph::ccMarked = std::vector<int>(Graph::n, 0);
+    Graph::ccs = std::list< std::tuple< int, std::list<int> > >();
+    int ccCount = 0;
     for (int i = 0; i < Graph::n; ++i)
     {
-        if (Graph::ccMarked->at(i) == 0)
+        if (Graph::ccMarked.at(i) == 0)
         {
-            std::list<int> *t = Graph::dfs(i);
-            std::tuple<int, std::list<int> > cc = std::make_tuple(t->size(), *t);
-            ccs->push_back(cc);
+            ++ccCount;
+            std::list<int> t = Graph::dfs(i);
+            std::tuple<int, std::list<int> > cc = std::make_tuple(t.size(), t);
+            ccs.push_back(cc);
+//            delete t, cc;
         }
+        std::cout << "CC NUMBER: " << ccCount << std::endl;
     }
 
     clock_t endTime = clock();
