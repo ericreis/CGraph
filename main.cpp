@@ -12,20 +12,20 @@
 //#define SUBDBLP_OUTPUT "../git-repos/CGraph/outputs/subdblp_output.txt"
 //#define DBLP_OUTPUT "../git-repos/CGraph/outputs/dblp_output.txt"
 
-#define EXAMPLE_PATH "/Users/ericreis/ClionProjects/CGraph/graphs/example.txt"
-#define AS_GRAPH_PATH "/Users/ericreis/ClionProjects/CGraph/graphs/as_graph.txt"
-#define SUBDBLP_PATH "/Users/ericreis/ClionProjects/CGraph/graphs/subdblp.txt"
-#define DBLP_PATH "/Users/ericreis/ClionProjects/CGraph/graphs/dblp.txt"
+#define EXAMPLE_PATH "../CGraph/graphs/example.txt"
+#define AS_GRAPH_PATH "../CGraph/graphs/as_graph.txt"
+#define SUBDBLP_PATH "../CGraph/graphs/subdblp.txt"
+#define DBLP_PATH "../CGraph/graphs/dblp.txt"
 
-#define EXAMPLE_OUTPUT "/Users/ericreis/ClionProjects/CGraph/outputs/example_output.txt"
-#define AS_GRAPH_OUTPUT "/Users/ericreis/ClionProjects/CGraph/outputs/as_graph_output.txt"
-#define SUBDBLP_OUTPUT "/Users/ericreis/ClionProjects/CGraph/outputs/subdblp_output.txt"
-#define DBLP_OUTPUT "/Users/ericreis/ClionProjects/CGraph/outputs/dblp_output.txt"
+#define EXAMPLE_OUTPUT "../CGraph/outputs/example_output.txt"
+#define AS_GRAPH_OUTPUT "../CGraph/outputs/as_graph_output.txt"
+#define SUBDBLP_OUTPUT "../CGraph/outputs/subdblp_output.txt"
+#define DBLP_OUTPUT "../CGraph/outputs/dblp_output.txt"
 
-#define EXAMPLE_RESULT "/Users/ericreis/ClionProjects/CGraph/presentation_results/example_output.txt"
-#define AS_GRAPH_RESULT "/Users/ericreis/ClionProjects/CGraph/presentation_results/as_graph_output.txt"
-#define SUBDBLP_RESULT "/Users/ericreis/ClionProjects/CGraph/presentation_results/subdblp_output.txt"
-#define DBLP_RESULT "/Users/ericreis/ClionProjects/CGraph/presentation_results/dblp_output.txt"
+#define EXAMPLE_RESULT "../CGraph/presentation_results/example_output.txt"
+#define AS_GRAPH_RESULT "../CGraph/presentation_results/as_graph_output.txt"
+#define SUBDBLP_RESULT "../CGraph/presentation_results/subdblp_output.txt"
+#define DBLP_RESULT "../CGraph/presentation_results/dblp_output.txt"
 
 /*
  * Author:  David Robert Nadeau
@@ -63,31 +63,7 @@ size_t getCurrentRSS( );
 
 int main()
 {
-    size_t startMem, endMem;
-
-    startMem = getCurrentRSS();
-
-    Graph<AdjacencyVector> g(DBLP_PATH);
-
-    endMem = getCurrentRSS();
-    std::cout << "Memory usage: " << endMem - startMem << " bytes." << std::endl;
-
-//    getchar();
-
-    clock_t startTime = clock();
-
-    for (int i = 0; i < 10; ++i)
-    {
-        g.bfs(i * 10); // vertices: 0, 10, 20, ..., 100
-    }
-//
-//    int d = g.diameter();
-//    std::cout << "Diameter: " << d << std::endl;
-
-    clock_t endTime = clock();
-
-    std::cout << "T = " << (double(endTime - startTime) / (double)CLOCKS_PER_SEC) / 10 << std::endl;
-
+//    Graph<AdjacencyVector> g(AS_GRAPH_PATH);
 //   	std::cout << *g.getStructure() << std::endl;
 //
 //    clock_t startTime = clock();
@@ -107,83 +83,85 @@ int main()
 //    g->connectedComponents();
 //
 //    g->generateOutput(DBLP_OUTPUT);
+    size_t startMem, endMem;
 
+    std::ofstream writef(DBLP_RESULT);
+    if (writef.is_open())
+    {
+        startMem = getCurrentRSS();
+        Graph<AdjacencyVector> g(DBLP_PATH);
+        endMem = getCurrentRSS();
+        std::cout << "Memory usage: " << endMem - startMem << " bytes.";
 
-//    std::ofstream writef(DBLP_RESULT);
-//    if (writef.is_open())
-//    {
-//        Graph<AdjacencyVector> g(DBLP_PATH);
-//
-//        writef << "DBLP_GRAPH (130k vertices): \n";
-//        writef << "Tempo medio para executar 10 BFS: ";
-//
-//        clock_t startTimeBfsAS = clock();
-//
-//        for (int i = 0; i < 10; ++i)
-//        {
-//            g.bfs(i * 10); // vertices: 0, 10, 20, ..., 100
-//        }
-//
-//        clock_t endTimeBfsAS = clock();
-//
-//        std::cout << "AQUI: " << (double(endTimeBfsAS - startTimeBfsAS) / (double)CLOCKS_PER_SEC) / 10 << std::endl;
-//        writef << (double(endTimeBfsAS - startTimeBfsAS) / (double)CLOCKS_PER_SEC) / 10 << "\n";
-//
-//        writef << "Tempo medio para executar 10 DFS: ";
-//
-//        clock_t startTimeDfsAS = clock();
-//
-//        for (int i = 0; i < 10; ++i)
-//        {
-//            g.dfs(i * 10); // vertices: 0, 10, 20, ..., 100
-//        }
-//
-//        clock_t endTimeDfsAS = clock();
-//
-//        writef << (double(endTimeDfsAS - startTimeDfsAS) / (double)CLOCKS_PER_SEC) / 10 << "\n";
-//
-//        writef << "Pai dos vertices 10, 20, 30, 40, 50 comecando em 1, 2, 3, 4, 5: \n";
-//        writef << "BFS: \n";
-//
-//        for (int i = 0; i < 5; ++i)
-//        {
-//            g.bfs(i);
-//            writef << i + 1 << ": ";
-//            for (int j = 1; j <= 5; ++j)
-//            {
-//                writef << std::get<0>(g.getTree().at(j * 10)) + 1 << ", ";
-//            }
-//            writef << "\n";
-//        }
-//
-//        writef << "DFS: \n";
-//
-//        for (int i = 0; i < 5; ++i)
-//        {
-//            g.dfs(i);
-//            writef << i + 1<< ": ";
-//            for (int j = 1; j <= 5; ++j)
-//            {
-//                writef << std::get<0>(g.getTree().at(j * 10)) + 1 << ", ";
-//            }
-//            writef << "\n";
-//        }
-//
-//        writef << "Componentes conexas. Quantas tem, qual a maior e qual a maior? \n";
-//        writef << "Ver no final do output de cada grafo (ESTAO EM ORDEM DECRESCENTE, logo a primeira e a maior e a ultima a menor) \n";
-//
-////        g.connectedComponents();
-//
-//        writef << "Distribuicao Empirica. Grafico \n";
-//        writef << "Ver no output de cada grafico tambem \n";
-//
-//        writef << "Diametro. ??????\n\n";
-//    }
-//    writef.close();
+        writef << "DBLP_GRAPH (130k vertices): \n";
+        writef << "Tempo medio para executar 10 BFS: ";
+
+        clock_t startTimeBfsAS = clock();
+
+        for (int i = 0; i < 10; ++i)
+        {
+            g.bfs(i * 10); // vertices: 0, 10, 20, ..., 100
+        }
+
+        clock_t endTimeBfsAS = clock();
+
+        std::cout << "AQUI: " << (double(endTimeBfsAS - startTimeBfsAS) / (double)CLOCKS_PER_SEC) / 10 << std::endl;
+        writef << (double(endTimeBfsAS - startTimeBfsAS) / (double)CLOCKS_PER_SEC) / 10 << "\n";
+
+        writef << "Tempo medio para executar 10 DFS: ";
+
+        clock_t startTimeDfsAS = clock();
+
+        for (int i = 0; i < 10; ++i)
+        {
+            g.dfs(i * 10); // vertices: 0, 10, 20, ..., 100
+        }
+
+        clock_t endTimeDfsAS = clock();
+
+        writef << (double(endTimeDfsAS - startTimeDfsAS) / (double)CLOCKS_PER_SEC) / 10 << "\n";
+
+        writef << "Pai dos vertices 10, 20, 30, 40, 50 comecando em 1, 2, 3, 4, 5: \n";
+        writef << "BFS: \n";
+
+        for (int i = 0; i < 5; ++i)
+        {
+            g.bfs(i);
+            writef << i + 1 << ": ";
+            for (int j = 1; j <= 5; ++j)
+            {
+                writef << std::get<0>(g.getTree().at(j * 10)) + 1 << ", ";
+            }
+            writef << "\n";
+        }
+
+        writef << "DFS: \n";
+
+        for (int i = 0; i < 5; ++i)
+        {
+            g.dfs(i);
+            writef << i + 1<< ": ";
+            for (int j = 1; j <= 5; ++j)
+            {
+                writef << std::get<0>(g.getTree().at(j * 10)) + 1 << ", ";
+            }
+            writef << "\n";
+        }
+
+        writef << "Componentes conexas. Quantas tem, qual a maior e qual a maior? \n";
+        writef << "Ver no final do output de cada grafo (ESTAO EM ORDEM DECRESCENTE, logo a primeira e a maior e a ultima a menor) \n";
+
+//        g.connectedComponents();
+
+        writef << "Distribuicao Empirica. Grafico \n";
+        writef << "Ver no output de cada grafico tambem \n";
+
+        writef << "Diametro. ??????\n\n";
+    }
+    writef.close();
 
     return 0;
 }
-
 
 /**
  * Returns the peak (maximum so far) resident set size (physical
@@ -245,7 +223,7 @@ size_t getCurrentRSS( )
     struct mach_task_basic_info info;
     mach_msg_type_number_t infoCount = MACH_TASK_BASIC_INFO_COUNT;
     if ( task_info( mach_task_self( ), MACH_TASK_BASIC_INFO,
-                    (task_info_t)&info, &infoCount ) != KERN_SUCCESS )
+        (task_info_t)&info, &infoCount ) != KERN_SUCCESS )
         return (size_t)0L;      /* Can't access? */
     return (size_t)info.resident_size;
 
