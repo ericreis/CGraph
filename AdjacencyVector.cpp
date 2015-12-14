@@ -19,7 +19,7 @@ AdjacencyVector::AdjacencyVector(const std::string file)
         AdjacencyVector::n = Constants::string2int(line);
 
         std::cout << "Initializing empty Adjacency Vector ..." << std::endl;
-        AdjacencyVector::vector = new std::vector< std::vector<int> >(AdjacencyVector::n, std::vector<int>());
+        AdjacencyVector::vector = std::vector< std::vector<int> >(AdjacencyVector::n, std::vector<int>());
         std::cout << "Finished initialization" << std::endl;
 
         AdjacencyVector::m = 0;
@@ -34,8 +34,8 @@ AdjacencyVector::AdjacencyVector(const std::string file)
             int nodeA = Constants::string2int(v.at(0)) - 1;
             int nodeB = Constants::string2int(v.at(1)) - 1;
 
-            AdjacencyVector::vector->at(nodeA).push_back(nodeB);
-            AdjacencyVector::vector->at(nodeB).push_back(nodeA);
+            AdjacencyVector::vector.at(nodeA).push_back(nodeB);
+            AdjacencyVector::vector.at(nodeB).push_back(nodeA);
 
             ++AdjacencyVector::nds.at(nodeA);
             ++AdjacencyVector::nds.at(nodeB);
@@ -98,16 +98,16 @@ std::vector<int> AdjacencyVector::getNds() const
     return AdjacencyVector::nds;
 }
 
-std::vector< std::vector<int> > *AdjacencyVector::getVector() const
+std::vector< std::vector<int> > AdjacencyVector::getVector() const
 {
     return AdjacencyVector::vector;
 }
 
 std::ostream& operator<<(std::ostream &out, const AdjacencyVector &v)
 {
-    for (std::vector< std::vector<int> >::iterator iti = v.getVector()->begin(); iti != v.getVector()->end(); ++iti)
+    for (std::vector< std::vector<int> >::iterator iti = v.getVector().begin(); iti != v.getVector().end(); ++iti)
     {
-        out << iti - v.getVector()->begin() + 1 << ": ";
+        out << iti - v.getVector().begin() + 1 << ": ";
         for (std::vector<int>::iterator itj = iti->begin(); itj != iti->end(); ++itj)
         {
             out << *itj + 1 << " ";
@@ -117,12 +117,11 @@ std::ostream& operator<<(std::ostream &out, const AdjacencyVector &v)
     return out;
 }
 
-std::vector<int> AdjacencyVector::getNeighbours(int v)
+std::vector<int> &AdjacencyVector::getNeighbours(int v)
 {
     if (v < AdjacencyVector::n)
     {
-        std::vector<int> neighbours(AdjacencyVector::vector->at(v));
-        return neighbours;
+        return AdjacencyVector::vector.at(v);
     }
     else
     {

@@ -16,6 +16,7 @@ Graph<T>::Graph(const std::string file)
     Graph::ds = Graph::structure->getDs();
     Graph::tree = std::vector< std::tuple<int, int> >(Graph::structure->getN(), std::tuple<int, int>(-1, -1));
     Graph::ccMarked = std::vector<int>(Graph::n, 0);
+    Graph::maxDist = 0;
 }
 
 template <typename T>
@@ -90,13 +91,21 @@ template <typename T>
 std::list<int> Graph<T>::bfs(const int s)
 {
     //int level = 0;
-    std::cout << "Started BFS ..." << std::endl;
-
-    clock_t startTime = clock();
+//    std::cout << "Started BFS ..." << std::endl;
+//
+//    clock_t startTime = clock();
 
     std::vector<int> marked(Graph::n, 0);
     std::queue<int> queue;
     std::list<int> covered;
+    std::vector<int> coveredMarked(Graph::n, 0);
+
+
+//    Graph::marked = std::vector<int>(Graph::n, 0);
+//    Graph::queue = std::queue<int>();
+//    Graph::covered = std::list<int>();
+//    Graph::coveredMarked = std::vector<int>(Graph::n, 0);
+
     marked.at(s) = 1;
     queue.push(s);
     tree.at(s) = std::make_tuple(-1,0); //tree->at(s) = (-1,level);
@@ -106,9 +115,15 @@ std::list<int> Graph<T>::bfs(const int s)
         int vert = queue.front();
         queue.pop();
 
-        covered.push_back(vert);
 
-        std::vector<int> neighbours = Graph::structure->getNeighbours(vert);
+        if (coveredMarked.at(vert) == 0)
+        {
+            coveredMarked.at(vert) = 1;
+            covered.push_back(vert);
+        }
+
+//        std::vector<int> neighbours = Graph::structure->getNeighbours(vert);
+        Graph::neighbours = Graph::structure->getNeighbours(vert);
         for (std::vector<int>::iterator it = neighbours.begin(); it != neighbours.end(); ++it)
         {
             if (marked.at(*it) == 0)
@@ -118,16 +133,18 @@ std::list<int> Graph<T>::bfs(const int s)
                 queue.push(*it);
                 tree.at(*it) = std::make_tuple (vert, std::get<1>(Graph::tree.at(vert)) + 1);
                 //tree->at(*it) = std::make_tuple (vert,level); // stores 'vert' as the parent of the current node being marked, and 'level' as its level
+                if (std::get<1>(Graph::tree.at(vert)) + 1 > Graph::maxDist)
+                    Graph::maxDist = std::get<1>(Graph::tree.at(vert)) + 1;
             }
         }
 //        delete neighbours;
     }
 //    delete queue, marked;
 
-    clock_t endTime = clock();
-
-    std::cout << "Finished running BFS ..." << std::endl;
-    std::cout << "took " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " secs" << std::endl;
+//    clock_t endTime = clock();
+//
+//    std::cout << "Finished running BFS ..." << std::endl;
+//    std::cout << "took " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " secs" << std::endl;
 
     return covered;
 }
@@ -135,14 +152,20 @@ std::list<int> Graph<T>::bfs(const int s)
 template <typename T>
 std::list<int> Graph<T>::dfs(const int s)
 {
-    std::cout << "Started DFS ..." << std::endl;
-
-    clock_t startTime = clock();
+//    std::cout << "Started DFS ..." << std::endl;
+//
+//    clock_t startTime = clock();
 
     std::vector<int> marked(Graph::n, 0);
     std::stack<int> stack;
     std::list<int> covered;
     std::vector<int> coveredMarked(Graph::n, 0);
+
+//    Graph::marked = std::vector<int>(Graph::n, 0);
+//    Graph::stack = std::stack<int>();
+//    Graph::covered = std::list<int>();
+//    Graph::coveredMarked = std::vector<int>(Graph::n, 0);
+
     stack.push(s);
     tree.at(s) = std::make_tuple(-1,0);
     while (!stack.empty())
@@ -160,13 +183,16 @@ std::list<int> Graph<T>::dfs(const int s)
         {
             marked.at(vert) = 1;
             Graph::ccMarked.at(vert) = 1;
-            std::vector<int> neighbours = Graph::structure->getNeighbours(vert);
+//            std::vector<int> neighbours = Graph::structure->getNeighbours(vert);
+            neighbours = Graph::structure->getNeighbours(vert);
             for (std::vector<int>::iterator it = neighbours.begin(); it != neighbours.end(); ++it)
             {
                 if (marked.at(*it) == 0)
                 {
                     stack.push(*it);
                     tree.at(*it) = std::make_tuple (vert, std::get<1>(Graph::tree.at(vert)) + 1);
+                    if (std::get<1>(Graph::tree.at(vert)) + 1 > Graph::maxDist)
+                        Graph::maxDist = std::get<1>(Graph::tree.at(vert)) + 1;
                 }
             }
 //            delete neighbours;
@@ -174,10 +200,10 @@ std::list<int> Graph<T>::dfs(const int s)
     }
 //    delete stack, marked;
 
-    clock_t endTime = clock();
-
-    std::cout << "Finished running DFS ..." << std::endl;
-    std::cout << "took " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " secs" << std::endl;
+//    clock_t endTime = clock();
+//
+//    std::cout << "Finished running DFS ..." << std::endl;
+//    std::cout << "took " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " secs" << std::endl;
 
     return covered;
 }
@@ -185,9 +211,9 @@ std::list<int> Graph<T>::dfs(const int s)
 template <typename T>
 void Graph<T>::connectedComponents()
 {
-    std::cout << "Started Connected Components ..." << std::endl;
-
-    clock_t startTime = clock();
+//    std::cout << "Started Connected Components ..." << std::endl;
+//
+//    clock_t startTime = clock();
 
     Graph::ccMarked = std::vector<int>(Graph::n, 0);
     Graph::ccs = std::list< std::tuple< int, std::list<int> > >();
@@ -205,10 +231,20 @@ void Graph<T>::connectedComponents()
         std::cout << "CC NUMBER: " << ccCount << std::endl;
     }
 
-    clock_t endTime = clock();
+//    clock_t endTime = clock();
+//
+//    std::cout << "Finished running Connected Components ..." << std::endl;
+//    std::cout << "took " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " secs" << std::endl;
+}
 
-    std::cout << "Finished running Connected Components ..." << std::endl;
-    std::cout << "took " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " secs" << std::endl;
+template <typename T>
+int Graph<T>::diameter()
+{
+    for (int i = 0; i < Graph::n; ++i)
+    {
+        Graph::bfs(i);
+    }
+    return Graph::maxDist;
 }
 
 template class Graph<AdjacencyMatrix>;

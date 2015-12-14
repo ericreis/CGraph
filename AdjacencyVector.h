@@ -21,7 +21,7 @@ private:
 
     std::vector<int> nds;      // Stores the degrees of each node
     std::vector<int> ds;       // Stores the number of nodes of each degree
-    std::vector< std::vector<int> > *vector;
+    std::vector< std::vector<int> > vector;
 
     friend std::ostream &operator<< (std::ostream &out, const AdjacencyVector &v);
 
@@ -34,9 +34,9 @@ public:
     int getMaxD() const;
     std::vector<int> getNds() const;
     std::vector<int> getDs() const;
-    std::vector< std::vector<int> > *getVector() const;
+    std::vector< std::vector<int> > getVector() const;
 
-    std::vector<int> getNeighbours(int v);
+    std::vector<int> &getNeighbours(int v);
 };
 
 

@@ -18,7 +18,7 @@ AdjacencyMatrix::AdjacencyMatrix(const std::string file)
         AdjacencyMatrix::n = Constants::string2int(line);
 
         std::cout << "Initializing empty Adjacency Matrix ..." << std::endl;
-        AdjacencyMatrix::matrix = new std::vector< std::vector<int> >(AdjacencyMatrix::n, std::vector<int>(AdjacencyMatrix::n));
+        AdjacencyMatrix::matrix = std::vector< std::vector<int> >(AdjacencyMatrix::n, std::vector<int>(AdjacencyMatrix::n));
         std::cout << "Finished initialization" << std::endl;
 
         AdjacencyMatrix::m = 0;
@@ -32,8 +32,9 @@ AdjacencyMatrix::AdjacencyMatrix(const std::string file)
             std::vector<std::string> v = Constants::split(line, ' ');
             int nodeA = Constants::string2int(v.at(0)) - 1;
             int nodeB = Constants::string2int(v.at(1)) - 1;
-            AdjacencyMatrix::matrix->at(nodeA).at(nodeB) = 1;
-            AdjacencyMatrix::matrix->at(nodeB).at(nodeA) = 1;
+
+            AdjacencyMatrix::matrix.at(nodeA).at(nodeB) = 1;
+            AdjacencyMatrix::matrix.at(nodeB).at(nodeA) = 1;
 
             ++AdjacencyMatrix::nds.at(nodeA);
             ++AdjacencyMatrix::nds.at(nodeB);
@@ -52,14 +53,15 @@ AdjacencyMatrix::AdjacencyMatrix(const std::string file)
     }
     readf.close();
 
-    std::cout << "Storing relative frequencies ..." << std::endl;
-    // As an node can have degree 0, we need to create a vector of size maxD + 1
-    AdjacencyMatrix::ds = std::vector<int>(AdjacencyMatrix::maxD + 1, 0);
-    for (std::vector<int>::iterator it = AdjacencyMatrix::nds.begin(); it != AdjacencyMatrix::nds.end(); ++it)
-    {
-        ++AdjacencyMatrix::ds.at(it - AdjacencyMatrix::nds.begin());
-    }
-    std::cout << "Finished storing frequencies" << std::endl;
+//    std::cout << "Storing relative frequencies ..." << std::endl;
+//    // As an node can have degree 0, we need to create a vector of size maxD + 1
+//    AdjacencyMatrix::ds = std::vector<int>(AdjacencyMatrix::maxD + 1, 0);
+//    for (std::vector<int>::iterator it = AdjacencyMatrix::nds.begin(); it != AdjacencyMatrix::nds.end(); ++it)
+//    {
+//        std::cout << it - AdjacencyMatrix::nds.begin() << std::endl;
+//        ++AdjacencyMatrix::ds.at(it - AdjacencyMatrix::nds.begin());
+//    }
+//    std::cout << "Finished storing frequencies" << std::endl;
 
     clock_t endTime = clock();
 
@@ -96,14 +98,14 @@ std::vector<int> AdjacencyMatrix::getDs() const
     return AdjacencyMatrix::ds;
 }
 
-std::vector< std::vector<int> > *AdjacencyMatrix::getMatrix() const
+std::vector< std::vector<int> > AdjacencyMatrix::getMatrix() const
 {
     return AdjacencyMatrix::matrix;
 }
 
 std::ostream& operator<<(std::ostream &out, const AdjacencyMatrix &m)
 {
-    for (std::vector< std::vector<int> >::iterator iti = m.getMatrix()->begin(); iti != m.getMatrix()->end(); ++iti)
+    for (std::vector< std::vector<int> >::iterator iti = m.getMatrix().begin(); iti != m.getMatrix().end(); ++iti)
     {
         for (std::vector<int>::iterator itj = iti->begin(); itj != iti->end(); ++itj)
         {
@@ -114,21 +116,21 @@ std::ostream& operator<<(std::ostream &out, const AdjacencyMatrix &m)
     return out;
 }
 
-std::vector<int> AdjacencyMatrix::getNeighbours(int v)
+std::vector<int> &AdjacencyMatrix::getNeighbours(int v)
 {
     if (v < AdjacencyMatrix::n)
     {
-        std::vector<int> neighbours(AdjacencyMatrix::nds.at(v), 0);
+        AdjacencyMatrix::neighbours = std::vector<int>(AdjacencyMatrix::nds.at(v), 0);
         int neighbourIndex = 0;
-        for (std::vector<int>::iterator it = AdjacencyMatrix::matrix->at(v).begin(); it != AdjacencyMatrix::matrix->at(v).end(); ++it)
+        for (std::vector<int>::iterator it = AdjacencyMatrix::matrix.at(v).begin(); it != AdjacencyMatrix::matrix.at(v).end(); ++it)
         {
             if (*it == 1)
             {
-                neighbours.at(neighbourIndex) = it - AdjacencyMatrix::matrix->at(v).begin();
+                AdjacencyMatrix::neighbours.at(neighbourIndex) = it - AdjacencyMatrix::matrix.at(v).begin();
                 ++neighbourIndex;
             }
         }
-        return neighbours;
+        return AdjacencyMatrix::neighbours;
     }
     else
     {
