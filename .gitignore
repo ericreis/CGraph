@@ -1,6 +1,9 @@
 # Build Directory
 build/
 
+#Case studies directory
+graphs/
+
 # IDE Files
 .DS_Store
 .idea
