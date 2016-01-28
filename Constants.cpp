@@ -11,6 +11,13 @@ int Constants::string2int(const std::string &s)
     return ss >> result ? result : 0;
 }
 
+float Constants::string2float(const std::string &s)
+{
+    std::stringstream ss(s);
+    float result;
+    return ss >> result ? result : 0;
+}
+
 std::vector<std::string> Constants::split(const std::string &s, const char c)
 {
     std::istringstream iss(s);

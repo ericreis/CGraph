@@ -31,7 +31,7 @@ private:
     std::stack<int> stack;
     std::list<int> covered;
     std::vector<int> coveredMarked;
-    std::vector<int> neighbours;
+    std::vector< std::tuple<int, float> > neighbours;
 
     std::vector< std::tuple<int,int> > tree; // Stores the parent and level of each node in the spanning tree, in the format: (parent,level)
 
@@ -47,7 +47,7 @@ public:
     std::list< std::tuple< int, std::list<int> > > getCcs();
 
     void generateOutput(const std::string s);
-    std::vector<int> getNeighbours(const int v);
+    std::vector< std::tuple<int, float> > getNeighbours(const int v);
 
     std::list<int> bfs(const int s);
     std::list<int> dfs(const int s);

@@ -14,6 +14,7 @@ class Constants
 {
 public:
     static int string2int(const std::string &s);
+    static float string2float(const std::string &s);
     static std::vector<std::string> split(const std::string &s, const char c);
 };
 

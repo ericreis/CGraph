@@ -19,7 +19,7 @@ AdjacencyVector::AdjacencyVector(const std::string file)
         AdjacencyVector::n = Constants::string2int(line);
 
         std::cout << "Initializing empty Adjacency Vector ..." << std::endl;
-        AdjacencyVector::vector = std::vector< std::vector<int> >(AdjacencyVector::n, std::vector<int>());
+        AdjacencyVector::vector = std::vector< std::vector< std::tuple<int, float> > >(AdjacencyVector::n, std::vector< std::tuple<int, float> >());
         std::cout << "Finished initialization" << std::endl;
 
         AdjacencyVector::m = 0;
@@ -34,8 +34,18 @@ AdjacencyVector::AdjacencyVector(const std::string file)
             int nodeA = Constants::string2int(v.at(0)) - 1;
             int nodeB = Constants::string2int(v.at(1)) - 1;
 
-            AdjacencyVector::vector.at(nodeA).push_back(nodeB);
-            AdjacencyVector::vector.at(nodeB).push_back(nodeA);
+            float weight;
+            try
+            {
+                weight = Constants::string2float(v.at(2));
+            }
+            catch (std::exception& e)
+            {
+                weight = 1.0f;
+            }
+
+            AdjacencyVector::vector.at(nodeA).push_back(std::make_tuple(nodeB, weight));
+            AdjacencyVector::vector.at(nodeB).push_back(std::make_tuple(nodeA, weight));
 
             ++AdjacencyVector::nds.at(nodeA);
             ++AdjacencyVector::nds.at(nodeB);
@@ -98,26 +108,28 @@ std::vector<int> AdjacencyVector::getNds() const
     return AdjacencyVector::nds;
 }
 
-std::vector< std::vector<int> > AdjacencyVector::getVector() const
+std::vector< std::vector< std::tuple<int, float> > > AdjacencyVector::getVector() const
 {
     return AdjacencyVector::vector;
 }
 
 std::ostream& operator<<(std::ostream &out, const AdjacencyVector &v)
 {
-    for (std::vector< std::vector<int> >::iterator iti = v.getVector().begin(); iti != v.getVector().end(); ++iti)
+    for (std::vector< std::vector< std::tuple<int, float> > >::iterator iti = v.getVector().begin(); iti != v.getVector().end(); ++iti)
     {
         out << iti - v.getVector().begin() + 1 << ": ";
-        for (std::vector<int>::iterator itj = iti->begin(); itj != iti->end(); ++itj)
+        std::cout << iti->size() << std::endl;
+        for (std::vector< std::tuple<int, float> >::iterator itj = iti->begin(); itj != iti->end(); ++itj)
         {
-            out << *itj + 1 << " ";
+            std::cout << std::get<0>(*itj) << std::endl;
+            out << std::get<0>(*itj) << " " << std::get<1>(*itj) << " ";
         }
         out << "\n";
     }
     return out;
 }
 
-std::vector<int> &AdjacencyVector::getNeighbours(int v)
+std::vector< std::tuple<int, float> > &AdjacencyVector::getNeighbours(int v)
 {
     if (v < AdjacencyVector::n)
     {

@@ -66,53 +66,12 @@ int main()
     size_t startMem, endMem;
 
     startMem = getCurrentRSS();
-    Graph<AdjacencyVector> g(AS_GRAPH_PATH);
+    Graph<AdjacencyVector> g(EXAMPLE_PATH);
     endMem = getCurrentRSS();
     std::cout << "Memory usage: " << endMem - startMem << " bytes." << std::endl;
 
+    std::cout << *g.getStructure() << std::endl;
 
-    /*
-     * Test 10 BFS
-     */
-    clock_t startTime = clock();
-
-    for (int i = 0; i < 10; ++i)
-    {
-        g.bfs(i * 10); // vertices: 0, 10, 20, ..., 100
-    }
-
-    clock_t endTime = clock();
-
-    std::cout << "T = " << (double(endTime - startTime) / (double)CLOCKS_PER_SEC) / 10 << std::endl;
-
-
-    /*
-     * Test 10 DFS
-     */
-//    clock_t startTime = clock();
-//
-//    for (int i = 0; i < 10; ++i)
-//    {
-//        g.dfs(i * 10); // vertices: 0, 10, 20, ..., 100
-//    }
-//
-//    clock_t endTime = clock();
-//
-//    std::cout << "T = " << (double(endTime - startTime) / (double)CLOCKS_PER_SEC) / 10 << std::endl;
-
-
-    /*
-     * Test Connected Component (PATH TO FILE)
-     */
-//    g.connectedComponents();
-//    g.generateOutput(DBLP_PATH);
-
-
-    /*
-     * Diameter
-//     */
-//    int d = g.diameter();
-//    std::cout << "Diameter = " << d << std::endl;
 
     return 0;
 }

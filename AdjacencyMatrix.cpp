@@ -116,17 +116,17 @@ std::ostream& operator<<(std::ostream &out, const AdjacencyMatrix &m)
     return out;
 }
 
-std::vector<int> &AdjacencyMatrix::getNeighbours(int v)
+std::vector< std::tuple<int, float> > &AdjacencyMatrix::getNeighbours(int v)
 {
     if (v < AdjacencyMatrix::n)
     {
-        AdjacencyMatrix::neighbours = std::vector<int>(AdjacencyMatrix::nds.at(v), 0);
+        AdjacencyMatrix::neighbours = std::vector< std::tuple<int, float> >(AdjacencyMatrix::nds.at(v), 0);
         int neighbourIndex = 0;
         for (std::vector<int>::iterator it = AdjacencyMatrix::matrix.at(v).begin(); it != AdjacencyMatrix::matrix.at(v).end(); ++it)
         {
             if (*it == 1)
             {
-                AdjacencyMatrix::neighbours.at(neighbourIndex) = it - AdjacencyMatrix::matrix.at(v).begin();
+                AdjacencyMatrix::neighbours.at(neighbourIndex) = std::make_tuple(it - AdjacencyMatrix::matrix.at(v).begin(), 1.0f);
                 ++neighbourIndex;
             }
         }

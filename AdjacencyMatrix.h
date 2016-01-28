@@ -23,7 +23,7 @@ private:
     std::vector<int> ds;       // Stores the number of nodes of each degree
     std::vector< std::vector<int> > matrix;
 
-    std::vector<int> neighbours;
+    std::vector< std::tuple<int, float> > neighbours;
 
     friend std::ostream &operator<< (std::ostream &out, const AdjacencyMatrix &m);
 
@@ -38,7 +38,7 @@ public:
     std::vector<int> getDs() const;
     std::vector< std::vector<int> > getMatrix() const;
 
-    std::vector<int> &getNeighbours(int v);
+    std::vector< std::tuple<int, float> > &getNeighbours(int v);
 };
 
 

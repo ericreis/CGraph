@@ -82,7 +82,7 @@ void Graph<T>::generateOutput(const std::string s)
 }
 
 template <typename T>
-std::vector<int> Graph<T>::getNeighbours(const int v)
+std::vector< std::tuple<int, float> > Graph<T>::getNeighbours(const int v)
 {
     return Graph::structure->getNeighbours(v);
 }
@@ -124,14 +124,14 @@ std::list<int> Graph<T>::bfs(const int s)
 
 //        std::vector<int> neighbours = Graph::structure->getNeighbours(vert);
         Graph::neighbours = Graph::structure->getNeighbours(vert);
-        for (std::vector<int>::iterator it = neighbours.begin(); it != neighbours.end(); ++it)
+        for (std::vector< std::tuple<int, float> >::iterator it = neighbours.begin(); it != neighbours.end(); ++it)
         {
-            if (marked.at(*it) == 0)
+            if (marked.at(std::get<0>(*it)) == 0)
             {
-                marked.at(*it) = 1;
-                Graph::ccMarked.at(*it) = 1;
-                queue.push(*it);
-                tree.at(*it) = std::make_tuple (vert, std::get<1>(Graph::tree.at(vert)) + 1);
+                marked.at(std::get<0>(*it)) = 1;
+                Graph::ccMarked.at(std::get<0>(*it)) = 1;
+                queue.push(std::get<0>(*it));
+                tree.at(std::get<0>(*it)) = std::make_tuple (vert, std::get<1>(Graph::tree.at(vert)) + 1);
                 //tree->at(*it) = std::make_tuple (vert,level); // stores 'vert' as the parent of the current node being marked, and 'level' as its level
                 if (std::get<1>(Graph::tree.at(vert)) + 1 > Graph::maxDist)
                     Graph::maxDist = std::get<1>(Graph::tree.at(vert)) + 1;
@@ -184,13 +184,13 @@ std::list<int> Graph<T>::dfs(const int s)
             marked.at(vert) = 1;
             Graph::ccMarked.at(vert) = 1;
 //            std::vector<int> neighbours = Graph::structure->getNeighbours(vert);
-            neighbours = Graph::structure->getNeighbours(vert);
-            for (std::vector<int>::iterator it = neighbours.begin(); it != neighbours.end(); ++it)
+            Graph::neighbours = Graph::structure->getNeighbours(vert);
+            for (std::vector< std::tuple<int, float> >::iterator it = neighbours.begin(); it != neighbours.end(); ++it)
             {
-                if (marked.at(*it) == 0)
+                if (marked.at(std::get<0>(*it)) == 0)
                 {
-                    stack.push(*it);
-                    tree.at(*it) = std::make_tuple (vert, std::get<1>(Graph::tree.at(vert)) + 1);
+                    stack.push(std::get<0>(*it));
+                    tree.at(std::get<0>(*it)) = std::make_tuple (vert, std::get<1>(Graph::tree.at(vert)) + 1);
                     if (std::get<1>(Graph::tree.at(vert)) + 1 > Graph::maxDist)
                         Graph::maxDist = std::get<1>(Graph::tree.at(vert)) + 1;
                 }
