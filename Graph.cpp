@@ -247,5 +247,47 @@ int Graph<T>::diameter()
     return Graph::maxDist;
 }
 
+template <typename T>
+std::list< std::tuple<int, float> > Graph<T>::dijkstra(const int s)
+{
+    std::vector<float> dist(Graph::n, std::numeric_limits<float>::infinity());
+    std::priority_queue< Node, std::vector<Node>, std::greater<Node> > pQueue;
+
+    dist.at(s) = 0;
+
+    Node node(s, 0);
+    pQueue.push(node);
+
+    std::vector< std::tuple <int, float> > initialNeighbours = Graph::getNeighbours(s);
+    for (int i = 0; i < initialNeighbours.size(); ++i)
+    {
+        Node node(std::get<0>(initialNeighbours.at(i)), dist.at(std::get<0>(initialNeighbours.at(i))));
+        pQueue.push(node);
+    }
+    
+    while (!pQueue.empty())
+    {
+        Node u = pQueue.top();
+        std::cout << "u: " << u << std::endl;
+        pQueue.pop();
+        Graph::neighbours = Graph::getNeighbours(u.value);
+        for (int i = 0; i < Graph::neighbours.size(); ++i)
+        {
+            std::cout << "v: " << std::get<0>(Graph::neighbours.at(i)) + 1 << std::endl;
+            std::cout << "dist[v] = " << dist.at(std::get<0>(Graph::neighbours.at(i))) <<  std::endl;
+            std::cout << "dist[u] + w(u, v) = " << dist.at(u.value) + std::get<1>(Graph::neighbours.at(i)) << std::endl;
+            if (dist.at(std::get<0>(Graph::neighbours.at(i))) > dist.at(u.value) + std::get<1>(Graph::neighbours.at(i)))
+            {
+                dist.at(std::get<0>(Graph::neighbours.at(i))) = dist.at(u.value) + std::get<1>(Graph::neighbours.at(i));
+                Node n(std::get<0>(Graph::neighbours.at(i)), dist.at(std::get<0>(Graph::neighbours.at(i))));
+                pQueue.push(n);
+            }
+            std::cout << "dist[v] = " << dist.at(std::get<0>(Graph::neighbours.at(i))) <<  std::endl;
+
+        }
+    }
+
+}
+
 template class Graph<AdjacencyMatrix>;
 template class Graph<AdjacencyVector>;

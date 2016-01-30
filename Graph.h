@@ -12,6 +12,9 @@
 #include <stack>
 #include <tuple>
 #include <list>
+#include <limits>
+
+#include "Node.h"
 
 template <typename T>
 class Graph
@@ -53,6 +56,8 @@ public:
     std::list<int> dfs(const int s);
     void connectedComponents();
     int diameter();
+
+    std::list< std::tuple<int, float> > dijkstra(const int s);
 };
 
 

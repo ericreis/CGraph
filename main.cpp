@@ -72,6 +72,7 @@ int main()
 
     std::cout << *g.getStructure() << std::endl;
 
+    g.dijkstra(0);
 
     return 0;
 }

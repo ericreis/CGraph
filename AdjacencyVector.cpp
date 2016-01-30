@@ -115,17 +115,28 @@ std::vector< std::vector< std::tuple<int, float> > > AdjacencyVector::getVector(
 
 std::ostream& operator<<(std::ostream &out, const AdjacencyVector &v)
 {
-    for (std::vector< std::vector< std::tuple<int, float> > >::iterator iti = v.getVector().begin(); iti != v.getVector().end(); ++iti)
+//    for (std::vector< std::vector< std::tuple<int, float> > >::iterator iti = v.getVector().begin(); iti != v.getVector().end(); ++iti)
+//    {
+//        out << iti - v.getVector().begin() + 1 << ": ";
+//        std::cout << iti->size() << std::endl;
+//        for (std::vector< std::tuple<int, float> >::iterator itj = iti->begin(); itj != iti->end(); ++itj)
+//        {
+//            std::cout << std::get<0>(*itj) << std::endl;
+//            out << std::get<0>(*itj) << " " << std::get<1>(*itj) << " ";
+//        }
+//        out << "\n";
+//    }
+
+    for (int i = 0; i < v.getVector().size(); ++i)
     {
-        out << iti - v.getVector().begin() + 1 << ": ";
-        std::cout << iti->size() << std::endl;
-        for (std::vector< std::tuple<int, float> >::iterator itj = iti->begin(); itj != iti->end(); ++itj)
+        out << i + 1 << ": ";
+        for (int j = 0; j < v.getVector().at(i).size(); ++j)
         {
-            std::cout << std::get<0>(*itj) << std::endl;
-            out << std::get<0>(*itj) << " " << std::get<1>(*itj) << " ";
+            out << std::get<0>(v.getVector().at(i).at(j)) + 1 << " - " << std::get<1>(v.getVector().at(i).at(j)) << " ";
         }
         out << "\n";
     }
+
     return out;
 }
 
