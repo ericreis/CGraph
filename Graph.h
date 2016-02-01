@@ -22,6 +22,7 @@ class Graph
 private:
     int n, m, maxD;
     double mediumD;
+    bool hasNegative;
 
     int maxDist;
 
@@ -52,11 +53,14 @@ public:
     void generateOutput(const std::string s);
     std::vector< std::tuple<int, float> > getNeighbours(const int v);
 
+    // first delivery
     std::list<int> bfs(const int s);
     std::list<int> dfs(const int s);
     void connectedComponents();
     int diameter();
 
+    // second delivery
+    bool hasNegativeEdges();
     std::list< std::tuple<int, float> > dijkstra(const int s);
 };
 

@@ -22,6 +22,7 @@ AdjacencyVector::AdjacencyVector(const std::string file)
         AdjacencyVector::vector = std::vector< std::vector< std::tuple<int, float> > >(AdjacencyVector::n, std::vector< std::tuple<int, float> >());
         std::cout << "Finished initialization" << std::endl;
 
+        AdjacencyVector::hasNegative = false;
         AdjacencyVector::m = 0;
         AdjacencyVector::maxD = 0;
         AdjacencyVector::nds = std::vector<int>(AdjacencyVector::n, 0);
@@ -44,6 +45,11 @@ AdjacencyVector::AdjacencyVector(const std::string file)
                 weight = 1.0f;
             }
 
+            if(weight < 0)
+            {
+                AdjacencyVector::hasNegative = true;
+            }
+            
             AdjacencyVector::vector.at(nodeA).push_back(std::make_tuple(nodeB, weight));
             AdjacencyVector::vector.at(nodeB).push_back(std::make_tuple(nodeA, weight));
 
@@ -106,6 +112,11 @@ std::vector<int> AdjacencyVector::getDs() const
 std::vector<int> AdjacencyVector::getNds() const
 {
     return AdjacencyVector::nds;
+}
+
+bool AdjacencyVector::getDijkstraCompatibility() const
+{
+    return AdjacencyVector::hasNegative;
 }
 
 std::vector< std::vector< std::tuple<int, float> > > AdjacencyVector::getVector() const

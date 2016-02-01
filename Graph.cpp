@@ -17,6 +17,7 @@ Graph<T>::Graph(const std::string file)
     Graph::tree = std::vector< std::tuple<int, int> >(Graph::structure->getN(), std::tuple<int, int>(-1, -1));
     Graph::ccMarked = std::vector<int>(Graph::n, 0);
     Graph::maxDist = 0;
+    Graph::hasNegative = Graph::structure->getDijkstraCompatibility();
 }
 
 template <typename T>
@@ -247,9 +248,15 @@ int Graph<T>::diameter()
     return Graph::maxDist;
 }
 
+bool Graph::hasNegativeEdges()
+{
+    return Graph::hasNegative;
+}
+
 template <typename T>
 std::list< std::tuple<int, float> > Graph<T>::dijkstra(const int s)
 {
+
     std::vector<float> dist(Graph::n, std::numeric_limits<float>::infinity());
     std::priority_queue< Node, std::vector<Node>, std::greater<Node> > pQueue;
 

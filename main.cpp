@@ -72,7 +72,14 @@ int main()
 
     std::cout << *g.getStructure() << std::endl;
 
-    g.dijkstra(0);
+    if(g.hasNegativeEdges() == true)
+    {
+        std::cout << "Can't run Dijsktra on a graph with negative weight edges." << std::endl;
+    }
+    else
+    {
+        g.dijkstra(0);
+    }
 
     return 0;
 }

@@ -19,6 +19,7 @@ class AdjacencyVector
 {
 private:
     int n, m, maxD;
+    bool hasNegative; // true if the graph contains at least one negative weight edge
 
     std::vector<int> nds;      // Stores the degrees of each node
     std::vector<int> ds;       // Stores the number of nodes of each degree
@@ -33,6 +34,7 @@ public:
     int getN() const;
     int getM() const;
     int getMaxD() const;
+    bool getDijkstraCompatibility() const;
     std::vector<int> getNds() const;
     std::vector<int> getDs() const;
     std::vector< std::vector< std::tuple<int, float> > > getVector() const;
