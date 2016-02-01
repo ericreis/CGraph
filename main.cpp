@@ -12,10 +12,16 @@
 //#define SUBDBLP_OUTPUT "../git-repos/CGraph/outputs/subdblp_output.txt"
 //#define DBLP_OUTPUT "../git-repos/CGraph/outputs/dblp_output.txt"
 
-#define EXAMPLE_PATH "/home/igor/git-repos/CGraph/graphs/example.txt"
+#define EXAMPLE_PATH "/Users/ericreis/ClionProjects/CGraph/graphs/example.txt"
 #define AS_GRAPH_PATH "/Users/ericreis/ClionProjects/CGraph/graphs/as_graph.txt"
 #define SUBDBLP_PATH "/Users/ericreis/ClionProjects/CGraph/graphs/subdblp.txt"
 #define DBLP_PATH "/Users/ericreis/ClionProjects/CGraph/graphs/dblp.txt"
+
+#define GRAPH_1 "/Users/ericreis/ClionProjects/CGraph/graphs/grafo_1.txt"
+#define GRAPH_2 "/Users/ericreis/ClionProjects/CGraph/graphs/grafo_2.txt"
+#define GRAPH_3 "/Users/ericreis/ClionProjects/CGraph/graphs/grafo_3.txt"
+#define GRAPH_4 "/Users/ericreis/ClionProjects/CGraph/graphs/grafo_4.txt"
+#define GRAPH_5 "/Users/ericreis/ClionProjects/CGraph/graphs/grafo_5.txt"
 
 #define EXAMPLE_OUTPUT "/Users/ericreis/ClionProjects/CGraph/outputs/example_output.txt"
 #define AS_GRAPH_OUTPUT "/Users/ericreis/ClionProjects/CGraph/outputs/as_graph_output.txt"
@@ -66,16 +72,21 @@ int main()
     size_t startMem, endMem;
 
     startMem = getCurrentRSS();
-    Graph<AdjacencyVector> g(EXAMPLE_PATH);
+    Graph<AdjacencyVector> g(GRAPH_5);
     endMem = getCurrentRSS();
     std::cout << "Memory usage: " << endMem - startMem << " bytes." << std::endl;
 
-    std::cout << *g.getStructure() << std::endl;
+//    std::cout << *g.getStructure() << std::endl;
 
     int startIndex = 1;
-    //g.dijkstra(startIndex-1); //starts algorithm at position 0, because internally the program uses indexes from 0 to N-1
-    g.prim(startIndex-1);
-    std::cout << "main.cpp line 77" << std::endl;
+
+    clock_t startTime = clock();
+
+//    g.dijkstra(startIndex - 1); //starts algorithm at position 0, because internally the program uses indexes from 0 to N-1
+    g.prim(startIndex - 1);
+
+    clock_t endTime = clock();
+    std::cout << "took " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " secs" << std::endl;
     return 0;
 }
 

@@ -258,6 +258,7 @@ std::list< std::tuple<int, float> > Graph<T>::dijkstra(const int s)
         return list;
     }
     std::vector<float> dist(Graph::n, std::numeric_limits<float>::infinity());
+    std::vector<bool> checked(Graph::n, false);
     std::priority_queue<Node, std::vector<Node>, std::greater<Node> > pQueue;
 
     dist.at(s) = 0;
@@ -265,31 +266,23 @@ std::list< std::tuple<int, float> > Graph<T>::dijkstra(const int s)
     Node node(s, 0);
     pQueue.push(node);
 
-    std::vector<std::tuple<int, float> > initialNeighbours = Graph::getNeighbours(s);
-    for (int i = 0; i < initialNeighbours.size(); ++i) {
-        Node node(std::get<0>(initialNeighbours.at(i)), dist.at(std::get<0>(initialNeighbours.at(i))));
-        pQueue.push(node);
-    }
-
-    while (!pQueue.empty()) {
+    while (!pQueue.empty())
+    {
         Node u = pQueue.top();
-        std::cout << "u: " << u << std::endl;
+        checked.at(u.value) = true;
         pQueue.pop();
         Graph::neighbours = Graph::getNeighbours(u.value);
-        for (int i = 0; i < Graph::neighbours.size(); ++i) {
-            std::cout << "v: " << std::get<0>(Graph::neighbours.at(i)) + 1 << std::endl;
-            std::cout << "dist[v] = " << dist.at(std::get<0>(Graph::neighbours.at(i))) << std::endl;
-            std::cout << "dist[u] + w(u, v) = " << dist.at(u.value) + std::get<1>(Graph::neighbours.at(i)) <<
-            std::endl;
-            if (dist.at(std::get<0>(Graph::neighbours.at(i))) >
-                dist.at(u.value) + std::get<1>(Graph::neighbours.at(i))) {
-                dist.at(std::get<0>(Graph::neighbours.at(i))) =
-                        dist.at(u.value) + std::get<1>(Graph::neighbours.at(i));
-                Node n(std::get<0>(Graph::neighbours.at(i)), dist.at(std::get<0>(Graph::neighbours.at(i))));
-                pQueue.push(n);
+        for (int i = 0; i < Graph::neighbours.size(); ++i)
+        {
+            if (dist.at(std::get<0>(Graph::neighbours.at(i))) > dist.at(u.value) + std::get<1>(Graph::neighbours.at(i)))
+            {
+                if (!checked.at(std::get<0>(Graph::neighbours.at(i))))
+                {
+                    dist.at(std::get<0>(Graph::neighbours.at(i))) = dist.at(u.value) + std::get<1>(Graph::neighbours.at(i));
+                    Node n(std::get<0>(Graph::neighbours.at(i)), dist.at(std::get<0>(Graph::neighbours.at(i))));
+                    pQueue.push(n);
+                }
             }
-            std::cout << "dist[v] = " << dist.at(std::get<0>(Graph::neighbours.at(i))) << std::endl;
-
         }
     }
 }
@@ -306,36 +299,28 @@ std::list< std::tuple<int, float> > Graph<T>::prim(const int s)
     Node node(s, 0);
     pQueue.push(node); // sets cost for MST containing only S to zero, and pushes S to pQueue
 
-/*    std::vector<std::tuple<int, float> > initialNeighbours = Graph::getNeighbours(s);
-    for (int i = 0; i < initialNeighbours.size(); ++i) {
-        Node node(std::get<0>(initialNeighbours.at(i)), cost.at(std::get<0>(initialNeighbours.at(i))));
-        pQueue.push(node);
-    }*/
-
-    while (!pQueue.empty()) {
+    while (!pQueue.empty())
+    {
         Node u = pQueue.top();
         checked.at(u.value) = true;
-        std::cout << "u: " << u << std::endl;
         pQueue.pop();
         Graph::neighbours = Graph::getNeighbours(u.value);
-        for (int i = 0; i < Graph::neighbours.size(); ++i) {
-            std::cout << "v: " << std::get<0>(Graph::neighbours.at(i)) + 1 << std::endl;
-            std::cout << "cost[v] = " << cost.at(std::get<0>(Graph::neighbours.at(i))) << std::endl;
-            std::cout << "w(u, v) = " << std::get<1>(Graph::neighbours.at(i)) << std::endl;
-            if (cost.at(std::get<0>(Graph::neighbours.at(i))) > std::get<1>(Graph::neighbours.at(i))) {
-                cost.at(std::get<0>(Graph::neighbours.at(i))) = std::get<1>(Graph::neighbours.at(i));
-                if(checked.at(std::get<0>(Graph::neighbours.at(i))) == false){
+        for (int i = 0; i < Graph::neighbours.size(); ++i)
+        {
+            if (cost.at(std::get<0>(Graph::neighbours.at(i))) > std::get<1>(Graph::neighbours.at(i)))
+            {
+                if (!checked.at(std::get<0>(Graph::neighbours.at(i))))
+                {
+                    cost.at(std::get<0>(Graph::neighbours.at(i))) = std::get<1>(Graph::neighbours.at(i));
                     Node n(std::get<0>(Graph::neighbours.at(i)), cost.at(std::get<0>(Graph::neighbours.at(i))));
                     pQueue.push(n);
                 }
             }
-            std::cout << "cost[v] = " << cost.at(std::get<0>(Graph::neighbours.at(i))) << std::endl;
         }
     }
     for(int i=0;i<Graph::n;++i)
     {
         totalCost += cost.at(i);
-        std::cout << "cost[" << i+1 << "] = " << cost.at(i) << std::endl;
     }
     std::cout << "MST cost = " << totalCost << std::endl;
 }
