@@ -2,6 +2,7 @@
 // Created by Eric Reis on 11/17/15.
 //
 
+#include <tuple>
 #include "AdjacencyMatrix.h"
 
 AdjacencyMatrix::AdjacencyMatrix(const std::string file)
@@ -88,6 +89,10 @@ int AdjacencyMatrix::getMaxD() const
     return AdjacencyMatrix::maxD;
 }
 
+bool AdjacencyMatrix::getDijkstraCompatibility() const
+{
+    return AdjacencyMatrix::hasNegative;
+}
 std::vector<int> AdjacencyMatrix::getNds() const
 {
     return AdjacencyMatrix::nds;
@@ -120,7 +125,7 @@ std::vector< std::tuple<int, float> > &AdjacencyMatrix::getNeighbours(int v)
 {
     if (v < AdjacencyMatrix::n)
     {
-        AdjacencyMatrix::neighbours = std::vector< std::tuple<int, float> >(AdjacencyMatrix::nds.at(v), 0);
+        AdjacencyMatrix::neighbours = std::vector< std::tuple<int, float> >(AdjacencyMatrix::nds.at(v), std::make_tuple(-1,-1.0f));
         int neighbourIndex = 0;
         for (std::vector<int>::iterator it = AdjacencyMatrix::matrix.at(v).begin(); it != AdjacencyMatrix::matrix.at(v).end(); ++it)
         {

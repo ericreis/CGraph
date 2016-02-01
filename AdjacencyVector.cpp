@@ -3,6 +3,7 @@
 //
 
 #include <list>
+#include <tuple>
 #include "AdjacencyVector.h"
 
 AdjacencyVector::AdjacencyVector(const std::string file)

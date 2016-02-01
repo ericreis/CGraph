@@ -12,7 +12,7 @@
 //#define SUBDBLP_OUTPUT "../git-repos/CGraph/outputs/subdblp_output.txt"
 //#define DBLP_OUTPUT "../git-repos/CGraph/outputs/dblp_output.txt"
 
-#define EXAMPLE_PATH "/Users/ericreis/ClionProjects/CGraph/graphs/example.txt"
+#define EXAMPLE_PATH "/home/igor/git-repos/CGraph/graphs/example.txt"
 #define AS_GRAPH_PATH "/Users/ericreis/ClionProjects/CGraph/graphs/as_graph.txt"
 #define SUBDBLP_PATH "/Users/ericreis/ClionProjects/CGraph/graphs/subdblp.txt"
 #define DBLP_PATH "/Users/ericreis/ClionProjects/CGraph/graphs/dblp.txt"
@@ -72,15 +72,8 @@ int main()
 
     std::cout << *g.getStructure() << std::endl;
 
-    if(g.hasNegativeEdges() == true)
-    {
-        std::cout << "Can't run Dijsktra on a graph with negative weight edges." << std::endl;
-    }
-    else
-    {
-        g.dijkstra(0);
-    }
-
+    g.dijkstra(0);
+    std::cout << "main.cpp line 77" << std::endl;
     return 0;
 }
 

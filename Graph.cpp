@@ -17,7 +17,6 @@ Graph<T>::Graph(const std::string file)
     Graph::tree = std::vector< std::tuple<int, int> >(Graph::structure->getN(), std::tuple<int, int>(-1, -1));
     Graph::ccMarked = std::vector<int>(Graph::n, 0);
     Graph::maxDist = 0;
-    Graph::hasNegative = Graph::structure->getDijkstraCompatibility();
 }
 
 template <typename T>
@@ -248,30 +247,31 @@ int Graph<T>::diameter()
     return Graph::maxDist;
 }
 
-bool Graph::hasNegativeEdges()
-{
-    return Graph::hasNegative;
-}
-
 template <typename T>
 std::list< std::tuple<int, float> > Graph<T>::dijkstra(const int s)
 {
-
+    std::list< std::tuple <int, float> > list;
+    if(Graph::getStructure()->getDijkstraCompatibility())
+    {
+        std::cout << "Can't run Dijkstra on a graph with negative weight edges." << std::endl;
+        return list;
+    }
+    std::cout << "Graph.cpp line 259\t N = " << Graph::n << std::endl;
     std::vector<float> dist(Graph::n, std::numeric_limits<float>::infinity());
     std::priority_queue< Node, std::vector<Node>, std::greater<Node> > pQueue;
-
+    std::cout << "Graph.cpp line 262\t" << s << std::endl;
     dist.at(s) = 0;
 
     Node node(s, 0);
     pQueue.push(node);
-
+    std::cout << "Graph.cpp line 267" << std::endl;
     std::vector< std::tuple <int, float> > initialNeighbours = Graph::getNeighbours(s);
     for (int i = 0; i < initialNeighbours.size(); ++i)
     {
         Node node(std::get<0>(initialNeighbours.at(i)), dist.at(std::get<0>(initialNeighbours.at(i))));
         pQueue.push(node);
     }
-    
+    std::cout << "Graph.cpp line 274" << std::endl;
     while (!pQueue.empty())
     {
         Node u = pQueue.top();
