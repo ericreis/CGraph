@@ -72,7 +72,9 @@ int main()
 
     std::cout << *g.getStructure() << std::endl;
 
-    g.dijkstra(0);
+    int startIndex = 1;
+    //g.dijkstra(startIndex-1); //starts algorithm at position 0, because internally the program uses indexes from 0 to N-1
+    g.prim(startIndex-1);
     std::cout << "main.cpp line 77" << std::endl;
     return 0;
 }

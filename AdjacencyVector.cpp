@@ -115,7 +115,7 @@ std::vector<int> AdjacencyVector::getNds() const
     return AdjacencyVector::nds;
 }
 
-bool AdjacencyVector::getDijkstraCompatibility() const
+bool AdjacencyVector::hasNegativeEdges() const
 {
     return AdjacencyVector::hasNegative;
 }

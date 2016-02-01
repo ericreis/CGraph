@@ -34,7 +34,7 @@ public:
     int getN() const;
     int getM() const;
     int getMaxD() const;
-    bool getDijkstraCompatibility() const;
+    bool hasNegativeEdges() const;
     std::vector<int> getNds() const;
     std::vector<int> getDs() const;
     std::vector< std::vector< std::tuple<int, float> > > getVector() const;

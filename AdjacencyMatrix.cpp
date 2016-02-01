@@ -89,7 +89,7 @@ int AdjacencyMatrix::getMaxD() const
     return AdjacencyMatrix::maxD;
 }
 
-bool AdjacencyMatrix::getDijkstraCompatibility() const
+bool AdjacencyMatrix::hasNegativeEdges() const
 {
     return AdjacencyMatrix::hasNegative;
 }

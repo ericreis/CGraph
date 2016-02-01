@@ -62,6 +62,7 @@ public:
     // second delivery
     bool hasNegativeEdges();
     std::list< std::tuple<int, float> > dijkstra(const int s);
+    std::list< std::tuple<int, float> > prim(const int s);
 };
 
 
