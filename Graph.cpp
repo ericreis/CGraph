@@ -17,6 +17,7 @@ Graph<T>::Graph(const std::string file)
     Graph::tree = std::vector< std::tuple<int, int> >(Graph::structure->getN(), std::tuple<int, int>(-1, -1));
     Graph::ccMarked = std::vector<int>(Graph::n, 0);
     Graph::maxDist = 0;
+    Graph::distSum = 0;
 }
 
 template <typename T>
@@ -285,6 +286,11 @@ std::list< std::tuple<int, float> > Graph<T>::dijkstra(const int s)
             }
         }
     }
+    for(int i = 0; i < Graph::n; ++i)
+    {
+        if(dist.at(i)!=std::numeric_limits<float>::infinity())
+            Graph::distSum += dist.at(i);
+    }
 }
 
 template <typename T>
@@ -318,11 +324,27 @@ std::list< std::tuple<int, float> > Graph<T>::prim(const int s)
             }
         }
     }
-    for(int i=0;i<Graph::n;++i)
+    for(int i = 0; i < Graph::n; ++i)
     {
         totalCost += cost.at(i);
     }
     std::cout << "MST cost = " << totalCost << std::endl;
+}
+
+template <typename T>
+float Graph<T>::getDistMedia()
+{
+    float media = 0;
+    Graph::distSum = 0;
+    for(int i = 0; i < Graph::n; ++i)
+    {
+        Graph::dijkstra(i);
+    }
+
+    if(Graph::n!=0)
+        media = distSum / ((Graph::n * (Graph::n - 1)) / 2);
+
+    return media;
 }
 
 template class Graph<AdjacencyMatrix>;

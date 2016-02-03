@@ -84,6 +84,7 @@ int main()
 
 //    g.dijkstra(startIndex - 1); //starts algorithm at position 0, because internally the program uses indexes from 0 to N-1
     g.prim(startIndex - 1);
+//    std::cout << g.getDistMedia() << std::endl;
 
     clock_t endTime = clock();
     std::cout << "took " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " secs" << std::endl;

@@ -27,3 +27,11 @@ std::vector<std::string> Constants::split(const std::string &s, const char c)
         v.push_back(str);
     return v;
 }
+
+int Constants::factorial(const int n)
+{
+    int fact = 1;
+    for (int i = 1; i <= n; ++i)
+        fact *= i;
+    return fact;
+}

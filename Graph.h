@@ -23,6 +23,7 @@ private:
     int n, m, maxD;
     double mediumD;
     bool hasNegative;
+    float distSum;
 
     int maxDist;
 
@@ -63,6 +64,7 @@ public:
     bool hasNegativeEdges();
     std::list< std::tuple<int, float> > dijkstra(const int s);
     std::list< std::tuple<int, float> > prim(const int s);
+    float getDistMedia();
 };
 
 
