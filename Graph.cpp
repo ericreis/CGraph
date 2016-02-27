@@ -14,6 +14,7 @@ Graph<T>::Graph(const std::string file)
     Graph::mediumD = 2.0 * Graph::m / Graph::n;
     Graph::nds = Graph::structure->getNds();
     Graph::ds = Graph::structure->getDs();
+    Graph::npds = Graph::structure->getNpds();
     Graph::tree = std::vector< std::tuple<int, int> >(Graph::structure->getN(), std::tuple<int, int>(-1, -1));
     Graph::ccMarked = std::vector<int>(Graph::n, 0);
     Graph::maxDist = 0;
@@ -345,6 +346,61 @@ float Graph<T>::getDistMedia()
         media = distSum / ((Graph::n * (Graph::n - 1)) / 2);
 
     return media;
+}
+
+template <typename T>
+void Graph<T>::greedyColoring(std::list<int> order)
+{
+    // set all vertices with no color
+    Graph::coloring = std::vector<int>(Graph::n, -1);
+    // set the initial color
+    int color = 0;
+    bool prohibitColor = false;
+
+    Graph::coloring[order.front()] = 0;
+    order.pop_front();
+
+    while (!order.empty())
+    {
+        for (std::list<int>::iterator it = order.begin(); it != order.end(); ++it)
+        {
+            Graph::neighbours = Graph::getNeighbours(*it);
+            prohibitColor = false;
+            for (int i = 0; i < Graph::neighbours.size(); ++i)
+            {
+                if (Graph::coloring[std::get<0>(Graph::neighbours[i])] == color) { prohibitColor = true; }
+            }
+            if (!prohibitColor)
+            {
+                Graph::coloring[*it] = color;
+                order.erase(it);
+            }
+        }
+        ++color;
+    }
+
+    std::cout << "Chromatic Number = " << color << std::endl;
+
+    for (int i = 0; i < Graph::coloring.size(); ++i)
+    {
+        std::cout << i + 1 << ": " << Graph::coloring[i] << std::endl;
+    }
+}
+
+template <typename T>
+void Graph<T>::welshPowell()
+{
+    std::list<int> order;
+
+    for (std::vector< std::list<int> >::reverse_iterator iti = Graph::npds.rbegin(); iti != Graph::npds.rend(); ++iti)
+    {
+        for (std::list<int>::iterator itj = iti->begin(); itj != iti->end(); ++itj)
+        {
+            order.push_back(*itj);
+        }
+    }
+
+    Graph::greedyColoring(order);
 }
 
 template class Graph<AdjacencyMatrix>;

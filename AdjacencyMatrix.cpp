@@ -103,6 +103,11 @@ std::vector<int> AdjacencyMatrix::getDs() const
     return AdjacencyMatrix::ds;
 }
 
+std::vector< std::list<int> > AdjacencyMatrix::getNpds() const
+{
+    return AdjacencyMatrix::npds;
+}
+
 std::vector< std::vector<int> > AdjacencyMatrix::getMatrix() const
 {
     return AdjacencyMatrix::matrix;

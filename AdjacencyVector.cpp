@@ -74,9 +74,11 @@ AdjacencyVector::AdjacencyVector(const std::string file)
     std::cout << "Storing relative frequencies ..." << std::endl;
     // As an node can have degree 0, we need to create a vector of size maxD + 1
     AdjacencyVector::ds = std::vector<int>(AdjacencyVector::maxD + 1, 0);
+    AdjacencyVector::npds = std::vector< std::list<int> >(AdjacencyVector::maxD + 1, std::list<int>());
     for (std::vector<int>::iterator it = AdjacencyVector::nds.begin(); it != AdjacencyVector::nds.end(); ++it)
     {
         ++AdjacencyVector::ds.at(*it);
+        AdjacencyVector::npds.at(*it).push_back(it - AdjacencyVector::nds.begin());
     }
     std::cout << "Finished storing frequencies" << std::endl;
 
@@ -113,6 +115,11 @@ std::vector<int> AdjacencyVector::getDs() const
 std::vector<int> AdjacencyVector::getNds() const
 {
     return AdjacencyVector::nds;
+}
+
+std::vector< std::list<int> > AdjacencyVector::getNpds() const
+{
+    return AdjacencyVector::npds;
 }
 
 bool AdjacencyVector::hasNegativeEdges() const

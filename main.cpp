@@ -2,7 +2,7 @@
 
 #include "Graph.h"
 
-//#define EXAMPLE_PATH "../git-repos/CGraph/graphs/example.txt"
+//#define EXAMPLE_PATH "../git-repos/CGraph/graphs/example_mrsleblanccsmath.txt"
 //#define AS_GRAPH_PATH "../git-repos/CGraph/graphs/as_graph.txt"
 //#define SUBDBLP_PATH "../git-repos/CGraph/graphs/subdblp.txt"
 //#define DBLP_PATH "../git-repos/CGraph/graphs/dblp.txt"
@@ -12,7 +12,10 @@
 //#define SUBDBLP_OUTPUT "../git-repos/CGraph/outputs/subdblp_output.txt"
 //#define DBLP_OUTPUT "../git-repos/CGraph/outputs/dblp_output.txt"
 
-#define EXAMPLE_PATH "/Users/ericreis/ClionProjects/CGraph/graphs/example.txt"
+#define EXAMPLE1_PATH "/Users/ericreis/ClionProjects/CGraph/graphs/example.txt"
+#define EXAMPLE2_PATH "/Users/ericreis/ClionProjects/CGraph/graphs/example_mrsleblanccsmath.txt"
+#define EXAMPLE_QUEEN5_PATH "/Users/ericreis/ClionProjects/CGraph/graphs/example_queen_5.txt"
+#define EXAMPLE_MYCIEL3_PATH "/Users/ericreis/ClionProjects/CGraph/graphs/example_myciel3.txt"
 #define AS_GRAPH_PATH "/Users/ericreis/ClionProjects/CGraph/graphs/as_graph.txt"
 #define SUBDBLP_PATH "/Users/ericreis/ClionProjects/CGraph/graphs/subdblp.txt"
 #define DBLP_PATH "/Users/ericreis/ClionProjects/CGraph/graphs/dblp.txt"
@@ -72,19 +75,15 @@ int main()
     size_t startMem, endMem;
 
     startMem = getCurrentRSS();
-    Graph<AdjacencyVector> g(GRAPH_5);
+    Graph<AdjacencyVector> g(EXAMPLE_MYCIEL3_PATH);
     endMem = getCurrentRSS();
     std::cout << "Memory usage: " << endMem - startMem << " bytes." << std::endl;
 
 //    std::cout << *g.getStructure() << std::endl;
 
-    int startIndex = 1;
-
     clock_t startTime = clock();
 
-//    g.dijkstra(startIndex - 1); //starts algorithm at position 0, because internally the program uses indexes from 0 to N-1
-    g.prim(startIndex - 1);
-//    std::cout << g.getDistMedia() << std::endl;
+    g.welshPowell();
 
     clock_t endTime = clock();
     std::cout << "took " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " secs" << std::endl;

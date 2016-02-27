@@ -27,8 +27,9 @@ private:
 
     int maxDist;
 
-    std::vector<int> nds;      // Stores the degree of each node
-    std::vector<int> ds;       // Stores the nodes of each degree
+    std::vector<int> nds;                       // Stores the degree of each node
+    std::vector<int> ds;                        // Stores the nodes of each degree
+    std::vector< std::list<int> > npds ;      // Stores the nodes per degree
     T *structure;
 //
     std::vector<int> marked;
@@ -42,6 +43,8 @@ private:
 
     std::vector<int> ccMarked; // Mark vector used in connectedComponents method
     std::list< std::tuple< int, std::list<int> > > ccs;   // Stores the connected components (size of cc, vector of cc's elements)
+
+    std::vector<int> coloring;
 
 public:
     Graph(const std::string file);
@@ -65,6 +68,10 @@ public:
     std::list< std::tuple<int, float> > dijkstra(const int s);
     std::list< std::tuple<int, float> > prim(const int s);
     float getDistMedia();
+
+    // coloring
+    void greedyColoring(std::list<int> order);
+    void welshPowell();
 };
 
 
