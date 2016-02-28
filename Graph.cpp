@@ -54,7 +54,7 @@ void Graph<T>::generateOutput(const std::string s)
         writef << "# n = " << Graph::n << "\n";
         writef << "# m = " << Graph::m << "\n";
         writef << "# d_medio = " << Graph::mediumD << "\n";
-        for (int i = 0; i <= Graph::maxD; ++i)   
+        for (int i = 0; i <= Graph::maxD; ++i)
         {
             writef << i << " " << (double) Graph::ds.at(i) / Graph::n << "\n";
         }
@@ -349,7 +349,7 @@ float Graph<T>::getDistMedia()
 }
 
 template <typename T>
-void Graph<T>::greedyColoring(std::list<int> order) // order is the list of uncolored nodes, sorted by degree decreasingly
+void Graph<T>::greedyColoring(std::list<int> order)
 {
     // set all vertices with no color
     Graph::coloring = std::vector<int>(Graph::n, -1);
@@ -357,34 +357,30 @@ void Graph<T>::greedyColoring(std::list<int> order) // order is the list of unco
     int color = 0;
     bool prohibitColor = false;
 
-    Graph::coloring[order.front()] = 0; //sets the initial color for the node in from of the list. This is the node with highest degree
+    Graph::coloring[order.front()] = 0;
     order.pop_front();
 
-    //this loop iterates over all uncolored nodes
     while (!order.empty())
     {
-        //iterates over the uncolored nodes sorted decreasingly by degree number
         for (std::list<int>::iterator it = order.begin(); it != order.end(); ++it)
         {
-            Graph::neighbours = Graph::getNeighbours(*it); //gets the list of the neighbors of the uncolored node with highest degree
+            Graph::neighbours = Graph::getNeighbours(*it);
             prohibitColor = false;
-            //this loop checks the color of all neighbors to determine if the current node can be colored with the current color
             for (int i = 0; i < Graph::neighbours.size(); ++i)
             {
-                if (Graph::coloring[std::get<0>(Graph::neighbours[i])] == color) { prohibitColor = true;break; } //if at least one neighbor has the current color, exits the loop
+                if (Graph::coloring[std::get<0>(Graph::neighbours[i])] == color) { prohibitColor = true; }
             }
-            if (!prohibitColor) // if no neighbor had the current color, colors the curent node with it and removes it from the uncolored list
+            if (!prohibitColor)
             {
                 Graph::coloring[*it] = color;
                 order.erase(it);
             }
         }
-        ++color; // when all nodes have been checked with the current color, increments the color and repeats the process for the remaining uncolored nodes
+        ++color;
     }
 
     std::cout << "Chromatic Number = " << color << std::endl;
 
-    std::cout << "Node : Color" << std::endl;
     for (int i = 0; i < Graph::coloring.size(); ++i)
     {
         std::cout << i + 1 << ": " << Graph::coloring[i] << std::endl;
@@ -395,12 +391,12 @@ template <typename T>
 void Graph<T>::welshPowell()
 {
     std::list<int> order;
-    // reversely iterates over npds, which is a vector containing the list of nodes for each degree
+
     for (std::vector< std::list<int> >::reverse_iterator iti = Graph::npds.rbegin(); iti != Graph::npds.rend(); ++iti)
     {
         for (std::list<int>::iterator itj = iti->begin(); itj != iti->end(); ++itj)
         {
-            order.push_back(*itj); //adds node to the end of the list
+            order.push_back(*itj);
         }
     }
 
